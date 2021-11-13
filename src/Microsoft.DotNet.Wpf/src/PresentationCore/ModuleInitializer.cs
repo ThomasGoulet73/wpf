@@ -1,7 +1,9 @@
 using System;
+using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using MS.Internal.Text.TextInterface;
 
 internal static class ModuleInitializer
 {
@@ -15,11 +17,16 @@ internal static class ModuleInitializer
     /// </summary>
 #pragma warning disable CA2255
     [ModuleInitializer]
-    public static void Initialize()
+    public static unsafe void Initialize()
     {
         IsProcessDpiAware();
 
-        MS.Internal.NativeWPFDLLLoader.LoadDwrite();
+        DWriteLoader.LoadDWriteLibraryAndGetProcAddress(out delegate* unmanaged<int, void*, void*, int> dwriteCreateFactory);
+
+        if (dwriteCreateFactory == null)
+            throw new DllNotFoundException("dwrite.dll", new Win32Exception());
+
+        Factory.DWriteCreateFactory = dwriteCreateFactory;
     }
 #pragma warning restore CA2255
 

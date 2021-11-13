@@ -18,7 +18,19 @@ using MS.Utility;
 using System.Diagnostics;
 
 namespace MS.Internal
-{    
+{
+    internal class Span
+    {
+        public object element;
+        public int length;
+
+        public Span(object element, int length)
+        {
+            this.element = element;
+            this.length = length;
+        }
+    }
+
     /// <summary>
     /// VECTOR: A series of spans
     /// </summary>
