@@ -8,7 +8,7 @@ namespace MS.Internal.Text.TextInterface
     internal unsafe class ItemProps
     {
         private NativeIUnknownWrapper<IDWriteNumberSubstitution> _numberSubstitution;
-        private NativePointerWrapper<DWRITE_SCRIPT_ANALYSIS> _scriptAnalysis;
+        private DWRITE_SCRIPT_ANALYSIS? _scriptAnalysis;
 
         /// <remarks>
         /// returns void* because returning IDWriteNumberSubstitution* generates asmmeta generation errors.
@@ -20,7 +20,17 @@ namespace MS.Internal.Text.TextInterface
         /// returns void* because returning DWRITE_SCRIPT_ANALYSIS* generates asmmeta generation errors.
         /// </remarks>
         public void* ScriptAnalysis
-             => _scriptAnalysis.Value;
+        {
+            get
+            {
+                if (!_scriptAnalysis.HasValue)
+                    return null;
+
+                DWRITE_SCRIPT_ANALYSIS scriptAnalysis = _scriptAnalysis.Value;
+
+                return &scriptAnalysis;
+            }
+        }
 
         public CultureInfo DigitCulture { get; private set; }
 
@@ -60,7 +70,7 @@ namespace MS.Internal.Text.TextInterface
 
             if (scriptAnalysis != null)
             {
-                result._scriptAnalysis = new NativePointerWrapper<DWRITE_SCRIPT_ANALYSIS>((DWRITE_SCRIPT_ANALYSIS*)scriptAnalysis);
+                result._scriptAnalysis = *(DWRITE_SCRIPT_ANALYSIS*)scriptAnalysis;
             }
 
             IDWriteNumberSubstitution* tempNumSubstitution = (IDWriteNumberSubstitution*)numberSubstitution;
