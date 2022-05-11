@@ -70,7 +70,7 @@ namespace MS.Internal.Text.TextInterface
         {
             get
             {
-                _font.Value->AddReference();
+                _font.Value->AddRef();
                 return (IntPtr)_font.Value;
             }
         }

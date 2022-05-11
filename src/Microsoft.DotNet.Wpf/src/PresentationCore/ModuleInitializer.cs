@@ -21,12 +21,12 @@ internal static class ModuleInitializer
     {
         IsProcessDpiAware();
 
-        DWriteLoader.LoadDWriteLibraryAndGetProcAddress(out delegate* unmanaged<int, void*, void*, int> dwriteCreateFactory);
+        DWriteLoader.LoadDWrite();
 
-        if (dwriteCreateFactory == null)
-            throw new DllNotFoundException("dwrite.dll", new Win32Exception());
-
-        Factory.DWriteCreateFactory = dwriteCreateFactory;
+        AppDomain.CurrentDomain.ProcessExit += static (object sender, EventArgs e) =>
+        {
+            DWriteLoader.UnloadDWrite();
+        };
     }
 #pragma warning restore CA2255
 

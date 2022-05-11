@@ -24,8 +24,48 @@ namespace MS.Internal.Text.TextInterface
             _fontFile = new NativeIUnknownWrapper<IDWriteFontFile>(nativePointer);
         }
 
+        /// WARNING: AFTER GETTING THIS NATIVE POINTER YOU ARE RESPONSIBLE FOR MAKING SURE THAT THE WRAPPING MANAGED
+        /// OBJECT IS KEPT ALIVE BY THE GC OR ELSE YOU ARE RISKING THE POINTER GETTING RELEASED BEFORE YOU'D 
+        /// WANT TO.
+        ///
+        internal IDWriteFontFile* DWriteFontFileNoAddRef =>
+            _fontFile.Value;
+
         public void Dispose()
         {
+        }
+
+        internal bool Analyze(
+                              out DWRITE_FONT_FILE_TYPE  fontFileType,
+                              out DWRITE_FONT_FACE_TYPE  fontFaceType,
+                              out uint  numberOfFaces,
+                              out int hr
+                              )
+        {
+            int isSupported = 0;
+            uint numberOfFacesDWrite = 0;
+            DWRITE_FONT_FILE_TYPE dwriteFontFileType;
+            DWRITE_FONT_FACE_TYPE dwriteFontFaceType;
+            hr = _fontFile.Value->Analyze(
+                                    &isSupported,
+                                    &dwriteFontFileType,
+                                    &dwriteFontFaceType,
+                                    &numberOfFacesDWrite
+                                    );
+
+            GC.KeepAlive(_fontFile);
+            if (hr != 0)
+            {
+                fontFileType = default;
+                fontFaceType = default;
+                numberOfFaces = default;
+                return false;
+            }
+
+            fontFileType = dwriteFontFileType;
+            fontFaceType = dwriteFontFaceType;
+            numberOfFaces = numberOfFacesDWrite;
+            return isSupported != 0;
         }
 
         /// <summary>

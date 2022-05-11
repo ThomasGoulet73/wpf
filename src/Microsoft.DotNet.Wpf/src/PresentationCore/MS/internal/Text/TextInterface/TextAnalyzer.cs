@@ -38,54 +38,60 @@ namespace MS.Internal.Text.TextInterface
             _textAnalyzer = new NativeIUnknownWrapper<IDWriteTextAnalyzer>(nativePointer);
         }
 
-        internal static IList<Span> Itemize(char* text, uint length, CultureInfo culture, Factory factory, bool isRightToLeftParagraph, CultureInfo numberCulture, bool ignoreUserOverride, uint numberSubstitutionMethod, ClassificationUtility classificationUtility, CreateTextAnalysisSink pfnCreateTextAnalysisSink, GetScriptAnalysisList pfnGetScriptAnalysisList, GetNumberSubstitutionList pfnGetNumberSubstitutionList, CreateTextAnalysisSource pfnCreateTextAnalysisSource)
+        internal static IList<Span> Itemize(char* text, uint length, CultureInfo culture, IDWriteFactory* pDWriteFactory, bool isRightToLeftParagraph, CultureInfo numberCulture, bool ignoreUserOverride, uint numberSubstitutionMethod, ClassificationUtility classificationUtility, CreateTextAnalysisSink pfnCreateTextAnalysisSink, GetScriptAnalysisList pfnGetScriptAnalysisList, GetNumberSubstitutionList pfnGetNumberSubstitutionList, CreateTextAnalysisSource pfnCreateTextAnalysisSource)
         {
-            IDWriteTextAnalyzer* pTextAnalyzer = null;
-            IDWriteTextAnalysisSink* pTextAnalysisSink = null;
-            IDWriteTextAnalysisSource* pTextAnalysisSource = null;
-
-            IDWriteFactory* pDWriteFactory = factory.DWriteFactoryAddRef;
-
-            int hr;
-            try
+            // If a text has zero length then we do not need to itemize.
+            if (length > 0)
             {
-                //pDWriteFactory->AddReference();
-                hr = pDWriteFactory->CreateTextAnalyzer(&pTextAnalyzer);
+                IDWriteTextAnalyzer* pTextAnalyzer = null;
+                IDWriteTextAnalysisSink* pTextAnalysisSink = null;
+                IDWriteTextAnalysisSource* pTextAnalysisSource = null;
 
-                char* pNumberSubstitutionLocaleName = null;
-
-                if (numberCulture != null)
+                int hr;
+                try
                 {
-                    fixed (char* pNumberSubstitutionLocaleNamePinned = numberCulture.IetfLanguageTag)
+                    pDWriteFactory->AddRef();
+                    hr = pDWriteFactory->CreateTextAnalyzer(&pTextAnalyzer);
+
+                    char* pNumberSubstitutionLocaleName = null;
+
+                    if (numberCulture != null)
                     {
-                        pNumberSubstitutionLocaleName = pNumberSubstitutionLocaleNamePinned;
+                        fixed (char* pNumberSubstitutionLocaleNamePinned = numberCulture.IetfLanguageTag)
+                        {
+                            pNumberSubstitutionLocaleName = pNumberSubstitutionLocaleNamePinned;
+                        }
+                    }
+
+                    fixed (char* pCultureName = culture.IetfLanguageTag)
+                    {
+                        hr = pfnCreateTextAnalysisSource(text, length, pCultureName, (void*)(pDWriteFactory), isRightToLeftParagraph, pNumberSubstitutionLocaleName, ignoreUserOverride, numberSubstitutionMethod, (void**)&pTextAnalysisSource);
+                        Marshal.ThrowExceptionForHR(hr);
+
+                        pTextAnalysisSink = (IDWriteTextAnalysisSink*)pfnCreateTextAnalysisSink();
+
+                        hr = pTextAnalyzer->AnalyzeScript(pTextAnalysisSource, 0, length, pTextAnalysisSink);
+                        Marshal.ThrowExceptionForHR(hr);
+
+                        hr = pTextAnalyzer->AnalyzeNumberSubstitution(pTextAnalysisSource, 0, length, pTextAnalysisSink);
+                        Marshal.ThrowExceptionForHR(hr);
+
+                        DWriteTextAnalysisNode<DWRITE_SCRIPT_ANALYSIS>* dwriteScriptAnalysisNode = (DWriteTextAnalysisNode<DWRITE_SCRIPT_ANALYSIS>*)pfnGetScriptAnalysisList(pTextAnalysisSink);
+                        DWriteTextAnalysisNode<IDWriteNumberSubstitution>* dwriteNumberSubstitutionNode = (DWriteTextAnalysisNode<IDWriteNumberSubstitution>*)pfnGetNumberSubstitutionList(pTextAnalysisSink);
+
+                        TextItemizer textItemizer = new TextItemizer(dwriteScriptAnalysisNode, dwriteNumberSubstitutionNode);
+
+                        return AnalyzeExtendedAndItemize(textItemizer, text, length, numberCulture, classificationUtility);
                     }
                 }
-
-                fixed (char* pCultureName = culture.IetfLanguageTag)
+                finally
                 {
-                    hr = pfnCreateTextAnalysisSource(text, length, pCultureName, (void*)(pDWriteFactory), isRightToLeftParagraph, pNumberSubstitutionLocaleName, ignoreUserOverride, numberSubstitutionMethod, (void**)&pTextAnalysisSource);
-                    Marshal.ThrowExceptionForHR(hr);
-
-                    pTextAnalysisSink = (IDWriteTextAnalysisSink*)pfnCreateTextAnalysisSink();
-
-                    hr = pTextAnalyzer->AnalyzeScript(pTextAnalysisSource, 0, length, pTextAnalysisSink);
-                    Marshal.ThrowExceptionForHR(hr);
-
-                    hr = pTextAnalyzer->AnalyzeNumberSubstitution(pTextAnalysisSource, 0, length, pTextAnalysisSink);
-                    Marshal.ThrowExceptionForHR(hr);
-
-                    DWriteTextAnalysisNode<DWRITE_SCRIPT_ANALYSIS>* dwriteScriptAnalysisNode = (DWriteTextAnalysisNode<DWRITE_SCRIPT_ANALYSIS>*)pfnGetScriptAnalysisList(pTextAnalysisSink);
-                    DWriteTextAnalysisNode<IDWriteNumberSubstitution>* dwriteNumberSubstitutionNode = (DWriteTextAnalysisNode<IDWriteNumberSubstitution>*)pfnGetNumberSubstitutionList(pTextAnalysisSink);
-
-                    TextItemizer textItemizer = new TextItemizer(dwriteScriptAnalysisNode, dwriteNumberSubstitutionNode);
-
-                    return AnalyzeExtendedAndItemize(textItemizer, text, length, numberCulture, classificationUtility);
+                    ReleaseItemizationNativeResources(&pDWriteFactory, &pTextAnalyzer, &pTextAnalysisSource, &pTextAnalysisSink);
                 }
             }
-            finally
+            else
             {
-                ReleaseItemizationNativeResources(&pDWriteFactory, &pTextAnalyzer, &pTextAnalysisSource, &pTextAnalysisSink);
+                return null;
             }
         }
 

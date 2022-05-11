@@ -1,6 +1,7 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using MS.Internal.Interop.DWrite;
 using System;
 using System.Runtime.InteropServices;
 
@@ -45,7 +46,7 @@ namespace MS.Internal.Text.TextInterface
                 FontFileEnumerator fontFileEnum = new FontFileEnumerator(
                                                           fontSourceCollection,
                                                           _fontFileLoader,
-                                                          (Native.IDWriteFactory*)factory.ToPointer()
+                                                          (IDWriteFactory*)factory.ToPointer()
                                                           );
                 IntPtr pIDWriteFontFileEnumeratorMirror = Marshal.GetComInterfaceForObject(
                                                         fontFileEnum,

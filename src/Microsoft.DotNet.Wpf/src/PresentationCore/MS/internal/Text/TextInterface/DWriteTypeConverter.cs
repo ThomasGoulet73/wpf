@@ -9,6 +9,16 @@ namespace MS.Internal.Text.TextInterface
     /// </summary>
     internal static class DWriteTypeConverter
     {
+        internal static DWRITE_FACTORY_TYPE Convert(FactoryType factoryType)
+        {
+            switch (factoryType)
+            {
+                case FactoryType.Shared: return DWRITE_FACTORY_TYPE.DWRITE_FACTORY_TYPE_SHARED;
+                case FactoryType.Isolated: return DWRITE_FACTORY_TYPE.DWRITE_FACTORY_TYPE_ISOLATED;
+                default: throw new InvalidOperationException();
+            }
+        }
+
         internal static DWRITE_MEASURING_MODE Convert(TextFormattingMode measuringMode)
         {
             switch (measuringMode)
@@ -93,6 +103,18 @@ namespace MS.Internal.Text.TextInterface
                         return (FontSimulations.Bold | FontSimulations.Oblique);
                     else
                         throw new InvalidOperationException();
+            }
+        }
+
+        internal static DWRITE_FONT_SIMULATIONS Convert(FontSimulations fontSimulations)
+        {
+            switch(fontSimulations)
+            {
+                case  FontSimulations.Bold                            :    return DWRITE_FONT_SIMULATIONS.DWRITE_FONT_SIMULATIONS_BOLD;
+                case  FontSimulations.Oblique                         :    return DWRITE_FONT_SIMULATIONS.DWRITE_FONT_SIMULATIONS_OBLIQUE;
+                case (FontSimulations.Bold | FontSimulations.Oblique) :    return DWRITE_FONT_SIMULATIONS.DWRITE_FONT_SIMULATIONS_BOLD | DWRITE_FONT_SIMULATIONS.DWRITE_FONT_SIMULATIONS_OBLIQUE;
+                case  FontSimulations.None                            :    return DWRITE_FONT_SIMULATIONS.DWRITE_FONT_SIMULATIONS_NONE;
+                default                                               :    throw new InvalidOperationException();
             }
         }
 

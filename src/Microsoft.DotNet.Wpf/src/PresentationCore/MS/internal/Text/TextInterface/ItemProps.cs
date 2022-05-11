@@ -76,7 +76,7 @@ namespace MS.Internal.Text.TextInterface
             IDWriteNumberSubstitution* tempNumSubstitution = (IDWriteNumberSubstitution*)numberSubstitution;
             if (tempNumSubstitution != null)
             {
-                tempNumSubstitution->AddReference();
+                tempNumSubstitution->AddRef();
             }
 
             result._numberSubstitution = new NativeIUnknownWrapper<IDWriteNumberSubstitution>(tempNumSubstitution);

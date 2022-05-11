@@ -139,8 +139,9 @@ namespace MS.Internal.Text.TextInterface
         /// </returns>
         internal FontFile CreateFontFile(Uri filePathUri)
         {
-            Native.IDWriteFontFile* dwriteFontFile = null;
-            int hr = InternalFactory.CreateFontFile((Native.IDWriteFactory*)_factory.Value, null, filePathUri, &dwriteFontFile);
+            IDWriteFontFile* dwriteFontFile = null;
+            int hr = 0;
+            //int hr = CreateFontFile(_factory.Value, null, filePathUri, &dwriteFontFile);
 
             // If DWrite's CreateFontFileReference fails then try opening the file using WPF's logic.
             // The failures that WPF returns are more granular than the HRESULTs that DWrite returns
@@ -160,6 +161,22 @@ namespace MS.Internal.Text.TextInterface
             DWriteUtil.ConvertHresultToException(hr);
 
             return new FontFile(dwriteFontFile);
+        }
+
+        /// <summary>
+        /// Creates an IDWriteFontFile* from a URI, using either the DWrite built in local font file loader or our custom font 
+        /// file loader implementation
+        /// </summary>
+        /// <param name="factory">The IDWriteFactory object<param>
+        /// <param name="fontFileLoader">Reference to our previously created and registered custom font file loader</param>
+        /// <param name="filePathUri">The URI</param>
+        /// <param name="dwriteFontFile">The newly created IDWRiteFontFile representation</param>
+        /// <returns>
+        /// Standard HRESULT error code
+        /// </returns>
+        internal static int CreateFontFile(IDWriteFactory* factory, FontFileLoader fontFileLoader, Uri filePathUri, IDWriteFontFile** dwriteFontFile)
+        {
+            throw new System.Exception();
         }
 
         /// <summary>
@@ -193,8 +210,8 @@ namespace MS.Internal.Text.TextInterface
         internal FontFace CreateFontFace(Uri filePathUri, uint faceIndex, FontSimulations fontSimulationFlags)
         {
             FontFile fontFile = CreateFontFile(filePathUri);
-            Native.DWRITE_FONT_FILE_TYPE dwriteFontFileType;
-            Native.DWRITE_FONT_FACE_TYPE dwriteFontFaceType;
+            DWRITE_FONT_FILE_TYPE dwriteFontFileType;
+            DWRITE_FONT_FACE_TYPE dwriteFontFaceType;
             uint numberOfFaces = 0;
 
             int hr;
@@ -202,7 +219,7 @@ namespace MS.Internal.Text.TextInterface
                                  out dwriteFontFileType,
                                  out dwriteFontFaceType,
                                  out numberOfFaces,
-                                 &hr
+                                 out hr
                                  ))
             {
                 if (faceIndex >= numberOfFaces)
@@ -210,16 +227,16 @@ namespace MS.Internal.Text.TextInterface
                     throw new ArgumentOutOfRangeException("faceIndex");
                 }
 
-                byte dwriteFontSimulationsFlags = DWriteTypeConverter.Convert(fontSimulationFlags);
+                DWRITE_FONT_SIMULATIONS dwriteFontSimulationsFlags = DWriteTypeConverter.Convert(fontSimulationFlags);
                 IDWriteFontFace* dwriteFontFace = null;
-                IDWriteFontFile* dwriteFontFile = (IDWriteFontFile*)fontFile.DWriteFontFileNoAddRef;
+                IDWriteFontFile* dwriteFontFile = fontFile.DWriteFontFileNoAddRef;
 
                 hr = _factory.Value->CreateFontFace(
-                                                     (DWRITE_FONT_FACE_TYPE)dwriteFontFaceType,
+                                                     dwriteFontFaceType,
                                                      1,
                                                      &dwriteFontFile,
                                                      faceIndex,
-                                                     (DWRITE_FONT_SIMULATIONS)dwriteFontSimulationsFlags,
+                                                     dwriteFontSimulationsFlags,
                                                      &dwriteFontFace
                                                      );
                 GC.KeepAlive(fontFile);
@@ -227,7 +244,7 @@ namespace MS.Internal.Text.TextInterface
 
                 DWriteUtil.ConvertHresultToException(hr);
 
-                return new FontFace((Native.IDWriteFontFace*)dwriteFontFace);
+                return new FontFace(dwriteFontFace);
             }
 
             // This path is here because there is a behavior mismatch between DWrite and WPF.
@@ -285,7 +302,7 @@ namespace MS.Internal.Text.TextInterface
 
             DWriteUtil.ConvertHresultToException(hr);
 
-            return new FontCollection((Native.IDWriteFontCollection*)fontCollection);
+            return new FontCollection(fontCollection);
         }
 
         /// <summary>
@@ -321,7 +338,7 @@ namespace MS.Internal.Text.TextInterface
 
             DWriteUtil.ConvertHresultToException(hr);
 
-            return new FontCollection((Native.IDWriteFontCollection*)dwriteFontCollection);
+            return new FontCollection(dwriteFontCollection);
         }
 
         internal TextAnalyzer CreateTextAnalyzer()
@@ -330,12 +347,25 @@ namespace MS.Internal.Text.TextInterface
 
             _factory.Value->CreateTextAnalyzer(&textAnalyzer);
 
-            return new TextAnalyzer((Native.IDWriteTextAnalyzer*)textAnalyzer);
+            return new TextAnalyzer(textAnalyzer);
         }
 
         internal static bool IsLocalUri(Uri uri)
         {
             return uri.IsFile && uri.IsLoopback && !uri.IsUnc;
+        }
+
+        internal static DWRITE_MATRIX GetIdentityTransform()
+        {
+            DWRITE_MATRIX transform;
+            transform.m11 = 1;
+            transform.m12 = 0;
+            transform.m22 = 1;
+            transform.m21 = 0;
+            transform.dx = 0;
+            transform.dy = 0;
+
+            return transform;
         }
     }
 }
