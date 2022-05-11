@@ -4,41 +4,26 @@ namespace MS.Internal.Interop.DWrite
 {
     internal unsafe struct IDWriteLocalFontFileLoader : IUnknown
     {
-        private readonly void** Vtbl;
+        public void** lpVtbl;
 
-        public int QueryInterface(Guid* guid, void** comObject)
+        public int QueryInterface(Guid* riid, void** ppvObject)
         {
-            var function = (delegate* unmanaged<IDWriteLocalFontFileLoader*, Guid*, void**, int>)Vtbl[0];
-
-            fixed (IDWriteLocalFontFileLoader* handle = &this)
-            {
-                return function(handle, guid, comObject);
-            }
+            return ((delegate* unmanaged<IDWriteLocalFontFileLoader*, Guid*, void**, int>)(lpVtbl[0]))((IDWriteLocalFontFileLoader*)Unsafe.AsPointer(ref this), riid, ppvObject);
         }
 
-        public uint AddReference()
+        public uint AddRef()
         {
-            var function = (delegate* unmanaged<IDWriteLocalFontFileLoader*, uint>)Vtbl[1];
-
-            fixed (IDWriteLocalFontFileLoader* handle = &this)
-            {
-                return function(handle);
-            }
+            return ((delegate* unmanaged<IDWriteLocalFontFileLoader*, uint>)(lpVtbl[1]))((IDWriteLocalFontFileLoader*)Unsafe.AsPointer(ref this));
         }
 
         public uint Release()
         {
-            var function = (delegate* unmanaged<IDWriteLocalFontFileLoader*, uint>)Vtbl[2];
-
-            fixed (IDWriteLocalFontFileLoader* handle = &this)
-            {
-                return function(handle);
-            }
+            return ((delegate* unmanaged<IDWriteLocalFontFileLoader*, uint>)(lpVtbl[2]))((IDWriteLocalFontFileLoader*)Unsafe.AsPointer(ref this));
         }
 
         public int GetFilePathLengthFromKey(void* fontFileReferenceKey, uint fontFileReferenceKeySize, uint* filePathLength)
         {
-            var function = (delegate* unmanaged<IDWriteLocalFontFileLoader*, void*, uint, uint*, int>)Vtbl[4];
+            var function = (delegate* unmanaged<IDWriteLocalFontFileLoader*, void*, uint, uint*, int>)lpVtbl[4];
 
             fixed (IDWriteLocalFontFileLoader* handle = &this)
             {
@@ -48,7 +33,7 @@ namespace MS.Internal.Interop.DWrite
 
         public int GetFilePathFromKey(void* fontFileReferenceKey, uint fontFileReferenceKeySize, ushort* filePath, uint filePathSize)
         {
-            var function = (delegate* unmanaged<IDWriteLocalFontFileLoader*, void*, uint, ushort*, uint, int>)Vtbl[5];
+            var function = (delegate* unmanaged<IDWriteLocalFontFileLoader*, void*, uint, ushort*, uint, int>)lpVtbl[5];
 
             fixed (IDWriteLocalFontFileLoader* handle = &this)
             {

@@ -1,109 +1,63 @@
-﻿using System;
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+using System;
+using System.Runtime.CompilerServices;
 
 namespace MS.Internal.Interop.DWrite
 {
     internal unsafe struct IDWriteFontFace : IUnknown
     {
-        private readonly void** Vtbl;
+        public void** lpVtbl;
 
-        public int QueryInterface(Guid* guid, void** comObject)
+        public int QueryInterface(Guid* riid, void** ppvObject)
         {
-            var function = (delegate* unmanaged<IDWriteFontFace*, Guid*, void**, int>)Vtbl[0];
-
-            fixed (IDWriteFontFace* handle = &this)
-            {
-                return function(handle, guid, comObject);
-            }
+            return ((delegate* unmanaged<IDWriteFontFace*, Guid*, void**, int>)(lpVtbl[0]))((IDWriteFontFace*)Unsafe.AsPointer(ref this), riid, ppvObject);
         }
 
-        public uint AddReference()
+        public uint AddRef()
         {
-            var function = (delegate* unmanaged<IDWriteFontFace*, uint>)Vtbl[1];
-
-            fixed (IDWriteFontFace* handle = &this)
-            {
-                return function(handle);
-            }
+            return ((delegate* unmanaged<IDWriteFontFace*, uint>)(lpVtbl[1]))((IDWriteFontFace*)Unsafe.AsPointer(ref this));
         }
 
         public uint Release()
         {
-            var function = (delegate* unmanaged<IDWriteFontFace*, uint>)Vtbl[2];
-
-            fixed (IDWriteFontFace* handle = &this)
-            {
-                return function(handle);
-            }
+            return ((delegate* unmanaged<IDWriteFontFace*, uint>)(lpVtbl[2]))((IDWriteFontFace*)Unsafe.AsPointer(ref this));
         }
 
         internal int GetFiles(uint* numberOfFiles, IDWriteFontFile** fontFiles)
         {
-            var function = (delegate* unmanaged<IDWriteFontFace*, uint*, IDWriteFontFile**, int>)Vtbl[4];
-
-            fixed (IDWriteFontFace* handle = &this)
-            {
-                return function(handle, numberOfFiles, fontFiles);
-            }
+            return ((delegate* unmanaged<IDWriteFontFace*, uint*, IDWriteFontFile**, int>)(lpVtbl[4]))((IDWriteFontFace*)Unsafe.AsPointer(ref this), numberOfFiles, fontFiles);
         }
 
         public ushort GetGlyphCount()
         {
-            var function = (delegate* unmanaged<IDWriteFontFace*, ushort>)Vtbl[9];
-
-            fixed (IDWriteFontFace* handle = &this)
-            {
-                return function(handle);
-            }
+            return ((delegate* unmanaged<IDWriteFontFace*, ushort>)(lpVtbl[9]))((IDWriteFontFace*)Unsafe.AsPointer(ref this));
         }
 
         public int GetDesignGlyphMetrics(ushort* glyphIndices, uint glyphCount, DWRITE_GLYPH_METRICS* glyphMetrics, int isSideways)
         {
-            var function = (delegate* unmanaged<IDWriteFontFace*, ushort*, uint, DWRITE_GLYPH_METRICS*, int, int>)Vtbl[10];
-
-            fixed (IDWriteFontFace* handle = &this)
-            {
-                return function(handle, glyphIndices, glyphCount, glyphMetrics, isSideways);
-            }
+            return ((delegate* unmanaged<IDWriteFontFace*, ushort*, uint, DWRITE_GLYPH_METRICS*, int, int>)(lpVtbl[10]))((IDWriteFontFace*)Unsafe.AsPointer(ref this), glyphIndices, glyphCount, glyphMetrics, isSideways);
         }
 
         public int GetGlyphIndices(uint* codePoints, uint codePointCount, ushort* glyphIndices)
         {
-            var function = (delegate* unmanaged<IDWriteFontFace*, uint*, uint, ushort*, int>)Vtbl[11];
-
-            fixed (IDWriteFontFace* handle = &this)
-            {
-                return function(handle, codePoints, codePointCount, glyphIndices);
-            }
+            return ((delegate* unmanaged<IDWriteFontFace*, uint*, uint, ushort*, int>)(lpVtbl[11]))((IDWriteFontFace*)Unsafe.AsPointer(ref this), codePoints, codePointCount, glyphIndices);
         }
 
         public int TryGetFontTable(uint openTypeTableTag, void** tableData, uint* tableSize, void** tableContext, int* exists)
         {
-            var function = (delegate* unmanaged<IDWriteFontFace*, uint, void**, uint*, void**, int*, int>)Vtbl[12];
-
-            fixed (IDWriteFontFace* handle = &this)
-            {
-                return function(handle, openTypeTableTag, tableData, tableSize, tableContext, exists);
-            }
+            return ((delegate* unmanaged<IDWriteFontFace*, uint, void**, uint*, void**, int*, int>)(lpVtbl[12]))((IDWriteFontFace*)Unsafe.AsPointer(ref this), openTypeTableTag, tableData, tableSize, tableContext, exists);
         }
 
         public void ReleaseFontTable(void* tableContext)
         {
-            var function = (delegate* unmanaged<IDWriteFontFace*, void*, void>)Vtbl[13];
-
-            fixed (IDWriteFontFace* handle = &this)
-            {
-                function(handle, tableContext);
-            }
+            ((delegate* unmanaged<IDWriteFontFace*, void*, void>)(lpVtbl[13]))((IDWriteFontFace*)Unsafe.AsPointer(ref this), tableContext);
         }
 
         public int GetGdiCompatibleGlyphMetrics(float emSize, float pixelsPerDip, DWRITE_MATRIX* transform, int useGdiNatural, ushort* glyphIndices, uint glyphCount, DWRITE_GLYPH_METRICS* glyphMetrics, int isSideways)
         {
-            var function = (delegate* unmanaged<IDWriteFontFace*, float, float, DWRITE_MATRIX*, int, ushort*, uint, DWRITE_GLYPH_METRICS*, int, int>)Vtbl[17];
-
-            fixed (IDWriteFontFace* handle = &this)
-            {
-                return function(handle, emSize, pixelsPerDip, transform, useGdiNatural, glyphIndices, glyphCount, glyphMetrics, isSideways);
-            }
+            return ((delegate* unmanaged<IDWriteFontFace*, float, float, DWRITE_MATRIX*, int, ushort*, uint, DWRITE_GLYPH_METRICS*, int, int>)(lpVtbl[17]))((IDWriteFontFace*)Unsafe.AsPointer(ref this), emSize, pixelsPerDip, transform, useGdiNatural, glyphIndices, glyphCount, glyphMetrics, isSideways);
         }
     }
 }

@@ -1,59 +1,38 @@
-﻿using System;
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+using System;
+using System.Runtime.CompilerServices;
 
 namespace MS.Internal.Interop.DWrite
 {
     internal unsafe struct IDWriteFontFile : IUnknown
     {
-        private readonly void** Vtbl;
+        public void** lpVtbl;
 
-        public int QueryInterface(Guid* guid, void** comObject)
+        public int QueryInterface(Guid* riid, void** ppvObject)
         {
-            var function = (delegate* unmanaged<IDWriteFontFile*, Guid*, void**, int>)Vtbl[0];
-
-            fixed (IDWriteFontFile* handle = &this)
-            {
-                return function(handle, guid, comObject);
-            }
+            return ((delegate* unmanaged<IDWriteFontFile*, Guid*, void**, int>)(lpVtbl[0]))((IDWriteFontFile*)Unsafe.AsPointer(ref this), riid, ppvObject);
         }
 
-        public uint AddReference()
+        public uint AddRef()
         {
-            var function = (delegate* unmanaged<IDWriteFontFile*, uint>)Vtbl[1];
-
-            fixed (IDWriteFontFile* handle = &this)
-            {
-                return function(handle);
-            }
+            return ((delegate* unmanaged<IDWriteFontFile*, uint>)(lpVtbl[1]))((IDWriteFontFile*)Unsafe.AsPointer(ref this));
         }
 
         public uint Release()
         {
-            var function = (delegate* unmanaged<IDWriteFontFile*, uint>)Vtbl[2];
-
-            fixed (IDWriteFontFile* handle = &this)
-            {
-                return function(handle);
-            }
+            return ((delegate* unmanaged<IDWriteFontFile*, uint>)(lpVtbl[2]))((IDWriteFontFile*)Unsafe.AsPointer(ref this));
         }
 
         public int GetReferenceKey(void** fontFileReferenceKey, uint* fontFileReferenceKeySize)
         {
-            var function = (delegate* unmanaged<IDWriteFontFile*, void**, uint*, int>)Vtbl[3];
-
-            fixed (IDWriteFontFile* handle = &this)
-            {
-                return function(handle, fontFileReferenceKey, fontFileReferenceKeySize);
-            }
+            return ((delegate* unmanaged<IDWriteFontFile*, void**, uint*, int>)(lpVtbl[3]))((IDWriteFontFile*)Unsafe.AsPointer(ref this), fontFileReferenceKey, fontFileReferenceKeySize);
         }
 
         public int GetLoader(IDWriteFontFileLoader** fontFileLoader)
         {
-            var function = (delegate* unmanaged<IDWriteFontFile*, IDWriteFontFileLoader**, int>)Vtbl[4];
-
-            fixed (IDWriteFontFile* handle = &this)
-            {
-                return function(handle, fontFileLoader);
-            }
+            return ((delegate* unmanaged<IDWriteFontFile*, IDWriteFontFileLoader**, int>)(lpVtbl[4]))((IDWriteFontFile*)Unsafe.AsPointer(ref this), fontFileLoader);
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using System;
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+using System;
 using System.Runtime.InteropServices;
 
 namespace MS.Internal.Interop
@@ -29,22 +32,6 @@ namespace MS.Internal.Interop
         {
             Value->Release();
 
-            handle = IntPtr.Zero;
-
-            return true;
-        }
-    }
-
-    internal unsafe class NativePointerWrapper<TClass> : NativePointerCriticalHandle<TClass>
-        where TClass : unmanaged
-    {
-        public NativePointerWrapper(TClass* pointer)
-            : base((IntPtr)pointer)
-        {
-        }
-
-        protected override bool ReleaseHandle()
-        {
             handle = IntPtr.Zero;
 
             return true;

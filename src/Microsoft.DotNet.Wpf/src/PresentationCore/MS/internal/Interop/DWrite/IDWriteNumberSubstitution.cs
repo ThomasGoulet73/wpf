@@ -4,30 +4,21 @@ namespace MS.Internal.Interop.DWrite
 {
     internal unsafe struct IDWriteNumberSubstitution : IUnknown
     {
-        private readonly void** Vtbl;
+        public void** lpVtbl;
 
-        public int QueryInterface(Guid* guid, void** comObject)
+        public int QueryInterface(Guid* riid, void** ppvObject)
         {
-            var function = (delegate* unmanaged<IDWriteNumberSubstitution*, Guid*, void**, int>)Vtbl[0];
-
-            fixed (IDWriteNumberSubstitution* handle = &this)
-            {
-                return function(handle, guid, comObject);
-            }
+            return ((delegate* unmanaged<IDWriteNumberSubstitution*, Guid*, void**, int>)(lpVtbl[0]))((IDWriteNumberSubstitution*)Unsafe.AsPointer(ref this), riid, ppvObject);
         }
 
-        public uint AddReference()
+        public uint AddRef()
         {
-            var function = (delegate* unmanaged<uint>)Vtbl[1];
-
-            return function();
+            return ((delegate* unmanaged<IDWriteNumberSubstitution*, uint>)(lpVtbl[1]))((IDWriteNumberSubstitution*)Unsafe.AsPointer(ref this));
         }
 
         public uint Release()
         {
-            var function = (delegate* unmanaged<uint>)Vtbl[2];
-
-            return function();
+            return ((delegate* unmanaged<IDWriteNumberSubstitution*, uint>)(lpVtbl[2]))((IDWriteNumberSubstitution*)Unsafe.AsPointer(ref this));
         }
     }
 }

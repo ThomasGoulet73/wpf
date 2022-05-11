@@ -4,41 +4,26 @@ namespace MS.Internal.Interop.DWrite
 {
     internal unsafe struct IDWriteFontList : IUnknown
     {
-        private readonly void** Vtbl;
+        public void** lpVtbl;
 
-        public int QueryInterface(Guid* guid, void** comObject)
+        public int QueryInterface(Guid* riid, void** ppvObject)
         {
-            var function = (delegate* unmanaged<IDWriteFontList*, Guid*, void**, int>)Vtbl[0];
-
-            fixed (IDWriteFontList* handle = &this)
-            {
-                return function(handle, guid, comObject);
-            }
+            return ((delegate* unmanaged<IDWriteFontList*, Guid*, void**, int>)(lpVtbl[0]))((IDWriteFontList*)Unsafe.AsPointer(ref this), riid, ppvObject);
         }
 
-        public uint AddReference()
+        public uint AddRef()
         {
-            var function = (delegate* unmanaged<IDWriteFontList*, uint>)Vtbl[1];
-
-            fixed (IDWriteFontList* handle = &this)
-            {
-                return function(handle);
-            }
+            return ((delegate* unmanaged<IDWriteFontList*, uint>)(lpVtbl[1]))((IDWriteFontList*)Unsafe.AsPointer(ref this));
         }
 
         public uint Release()
         {
-            var function = (delegate* unmanaged<IDWriteFontList*, uint>)Vtbl[2];
-
-            fixed (IDWriteFontList* handle = &this)
-            {
-                return function(handle);
-            }
+            return ((delegate* unmanaged<IDWriteFontList*, uint>)(lpVtbl[2]))((IDWriteFontList*)Unsafe.AsPointer(ref this));
         }
 
         public int GetFontCollection(IDWriteFontCollection** fontCollection)
         {
-            var function = (delegate* unmanaged<IDWriteFontList*, IDWriteFontCollection**, int>)Vtbl[3];
+            var function = (delegate* unmanaged<IDWriteFontList*, IDWriteFontCollection**, int>)lpVtbl[3];
 
             fixed (IDWriteFontList* handle = &this)
             {
@@ -48,7 +33,7 @@ namespace MS.Internal.Interop.DWrite
 
         public uint GetFontCount()
         {
-            var function = (delegate* unmanaged<IDWriteFontList*, uint>)Vtbl[4];
+            var function = (delegate* unmanaged<IDWriteFontList*, uint>)lpVtbl[4];
 
             fixed (IDWriteFontList* handle = &this)
             {
@@ -58,7 +43,7 @@ namespace MS.Internal.Interop.DWrite
 
         public int GetFont(uint index, IDWriteFont** font)
         {
-            var function = (delegate* unmanaged<IDWriteFontList*, uint, IDWriteFont**, int>)Vtbl[5];
+            var function = (delegate* unmanaged<IDWriteFontList*, uint, IDWriteFont**, int>)lpVtbl[5];
 
             fixed (IDWriteFontList* handle = &this)
             {

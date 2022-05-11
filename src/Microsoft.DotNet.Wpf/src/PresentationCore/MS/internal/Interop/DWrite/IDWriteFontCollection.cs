@@ -1,69 +1,43 @@
-﻿using System;
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+using System;
+using System.Runtime.CompilerServices;
 
 namespace MS.Internal.Interop.DWrite
 {
     internal unsafe struct IDWriteFontCollection : IUnknown
     {
-        private readonly void** Vtbl;
+        public void** lpVtbl;
 
-        public int QueryInterface(Guid* guid, void** comObject)
+        public int QueryInterface(Guid* riid, void** ppvObject)
         {
-            var function = (delegate* unmanaged<IDWriteFontCollection*, Guid*, void**, int>)Vtbl[0];
-
-            fixed (IDWriteFontCollection* handle = &this)
-            {
-                return function(handle, guid, comObject);
-            }
+            return ((delegate* unmanaged<IDWriteFontCollection*, Guid*, void**, int>)(lpVtbl[0]))((IDWriteFontCollection*)Unsafe.AsPointer(ref this), riid, ppvObject);
         }
 
-        public uint AddReference()
+        public uint AddRef()
         {
-            var function = (delegate* unmanaged<IDWriteFontCollection*, uint>)Vtbl[1];
-
-            fixed (IDWriteFontCollection* handle = &this)
-            {
-                return function(handle);
-            }
+            return ((delegate* unmanaged<IDWriteFontCollection*, uint>)(lpVtbl[1]))((IDWriteFontCollection*)Unsafe.AsPointer(ref this));
         }
 
         public uint Release()
         {
-            var function = (delegate* unmanaged<IDWriteFontCollection*, uint>)Vtbl[2];
-
-            fixed (IDWriteFontCollection* handle = &this)
-            {
-                return function(handle);
-            }
+            return ((delegate* unmanaged<IDWriteFontCollection*, uint>)(lpVtbl[2]))((IDWriteFontCollection*)Unsafe.AsPointer(ref this));
         }
 
         public uint GetFontFamilyCount()
         {
-            fixed (IDWriteFontCollection* handle = &this)
-            {
-                var function = (delegate* unmanaged<IDWriteFontCollection*, uint>)Vtbl[3];
-
-                return function(handle);
-            }
+            return ((delegate* unmanaged<IDWriteFontCollection*, uint>)(lpVtbl[3]))((IDWriteFontCollection*)Unsafe.AsPointer(ref this));
         }
 
         public int GetFontFamily(uint index, IDWriteFontFamily** fontFamily)
         {
-            fixed (IDWriteFontCollection* handle = &this)
-            {
-                var function = (delegate* unmanaged<IDWriteFontCollection*, uint, IDWriteFontFamily**, int>)Vtbl[4];
-
-                return function(handle, index, fontFamily);
-            }
+            return ((delegate* unmanaged<IDWriteFontCollection*, uint, IDWriteFontFamily**, int>)(lpVtbl[4]))((IDWriteFontCollection*)Unsafe.AsPointer(ref this), index, fontFamily);
         }
 
         public int FindFamilyName(ushort* familyName, uint* index, int* exists)
         {
-            fixed (IDWriteFontCollection* handle = &this)
-            {
-                var function = (delegate* unmanaged<IDWriteFontCollection*, ushort*, uint*, int*, int>)Vtbl[5];
-
-                return function(handle, familyName, index, exists);
-            }
+            return ((delegate* unmanaged[Stdcall]<IDWriteFontCollection*, ushort*, uint*, int*, int>)(lpVtbl[5]))((IDWriteFontCollection*)Unsafe.AsPointer(ref this), familyName, index, exists);
         }
     }
 }

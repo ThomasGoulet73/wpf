@@ -25,6 +25,20 @@
     <Compile Include="$(WpfCommonDir)src\System\SR.cs">
         <Link>Common\System\SR.cs</Link>
     </Compile>
+    <Compile Include="$(WpfCommonDir)\src\Interop\Windows\Interop.HRESULT_FROM_WIN32.cs"
+             Link="Common\Interop\Windows\Interop.HRESULT_FROM_WIN32.cs" />
+    <Compile Include="$(WpfCommonDir)\src\Interop\Windows\Interop.Libraries.cs"
+             Link="Common\Interop\Windows\Interop.Libraries.cs" />
+    <Compile Include="$(WpfCommonDir)\src\Interop\Windows\Kernel32\Interop.FreeLibrary.cs"
+             Link="Common\Interop\Windows\Kernel32\Interop.FreeLibrary.cs" />
+    <Compile Include="$(WpfCommonDir)\src\Interop\Windows\Kernel32\Interop.GetModuleHandle.cs"
+             Link="Common\Interop\Windows\Kernel32\Interop.GetModuleHandle.cs" />
+    <Compile Include="$(WpfCommonDir)\src\Interop\Windows\Kernel32\Interop.GetProcAddress.cs"
+             Link="Common\Interop\Windows\Kernel32\Interop.GetProcAddress.cs" />
+    <Compile Include="$(WpfCommonDir)\src\Interop\Windows\Kernel32\Interop.LoadLibrary.cs"
+             Link="Common\Interop\Windows\Kernel32\Interop.LoadLibrary.cs" />
+    <Compile Include="$(WpfCommonDir)\src\Interop\Windows\Kernel32\Interop.LoadLibraryEx.cs"
+             Link="Common\Interop\Windows\Kernel32\Interop.LoadLibraryEx.cs" />
     <Compile Include="$(WpfCommonDir)\Graphics\wgx_error.cs" />
     <Compile Include="$(WpfCommonDir)\Graphics\wgx_render.cs" />
     <Compile Include="$(WpfCommonDir)\Graphics\wgx_exports.cs" />
@@ -231,6 +245,7 @@
     <Compile Include="MS\Internal\Ink\InkSerializedFormat\StrokeDescriptor.cs" />
     <Compile Include="MS\Internal\Ink\InkSerializedFormat\StrokeSerializer.cs" />
     <Compile Include="MS\Internal\Ink\InkSerializedFormat\TransformDescriptor.cs" />
+    <Compile Include="MS\Internal\Interop\DWrite\DWRITE_FONT_FACE_TYPE.cs" />
     <Compile Include="MS\Internal\Interop\DWrite\DWRITE_FONT_FEATURE.cs" />
     <Compile Include="MS\Internal\Interop\DWrite\DWRITE_FONT_FEATURE_TAG.cs" />
     <Compile Include="MS\Internal\Interop\DWrite\DWRITE_FONT_METRICS.cs" />
@@ -305,6 +320,7 @@
     <Compile Include="MS\Internal\Text\TextInterface\FactoryType.cs" />
     <Compile Include="MS\Internal\Text\TextInterface\Font.cs" />
     <Compile Include="MS\Internal\Text\TextInterface\FontCollection.cs" />
+    <Compile Include="MS\Internal\Text\TextInterface\FontCollectionLoader.cs" />
     <Compile Include="MS\Internal\Text\TextInterface\FontFace.cs" />
     <Compile Include="MS\Internal\Text\TextInterface\FontFaceType.cs" />
     <Compile Include="MS\Internal\Text\TextInterface\FontFamily.cs" />
@@ -320,7 +336,6 @@
     <Compile Include="MS\Internal\Text\TextInterface\IClassification.cs" />
     <Compile Include="MS\Internal\Text\TextInterface\IFontSource.cs" />
     <Compile Include="MS\Internal\Text\TextInterface\IFontSourceCollection.cs" />
-    <Compile Include="MS\Internal\Text\TextInterface\IFontSourceCollectionFactory.cs" />
     <Compile Include="MS\Internal\Text\TextInterface\IFontSourceFactory.cs" />
     <Compile Include="MS\Internal\Text\TextInterface\InformationalStringID.cs" />
     <Compile Include="MS\Internal\Text\TextInterface\ItemProps.cs" />

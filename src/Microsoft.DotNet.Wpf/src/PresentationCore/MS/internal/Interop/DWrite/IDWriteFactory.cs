@@ -1,71 +1,58 @@
-﻿using System;
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+using System;
+using System.Runtime.CompilerServices;
 
 namespace MS.Internal.Interop.DWrite
 {
     internal unsafe struct IDWriteFactory : IUnknown
     {
-        private readonly void** Vtbl;
+        public void** lpVtbl;
 
-        public int QueryInterface(Guid* guid, void** comObject)
+        public int QueryInterface(Guid* riid, void** ppvObject)
         {
-            var function = (delegate* unmanaged<IDWriteFactory*, Guid*, void**, int>)Vtbl[0];
-
-            fixed (IDWriteFactory* handle = &this)
-            {
-                return function(handle, guid, comObject);
-            }
+            return ((delegate* unmanaged<IDWriteFactory*, Guid*, void**, int>)(lpVtbl[0]))((IDWriteFactory*)Unsafe.AsPointer(ref this), riid, ppvObject);
         }
 
-        public uint AddReference()
+        public uint AddRef()
         {
-            var function = (delegate* unmanaged<IDWriteFactory*, uint>)Vtbl[1];
-
-            fixed (IDWriteFactory* handle = &this)
-            {
-                return function(handle);
-            }
+            return ((delegate* unmanaged<IDWriteFactory*, uint>)(lpVtbl[1]))((IDWriteFactory*)Unsafe.AsPointer(ref this));
         }
 
         public uint Release()
         {
-            var function = (delegate* unmanaged<IDWriteFactory*, uint>)Vtbl[2];
-
-            fixed (IDWriteFactory* handle = &this)
-            {
-                return function(handle);
-            }
+            return ((delegate* unmanaged<IDWriteFactory*, uint>)(lpVtbl[2]))((IDWriteFactory*)Unsafe.AsPointer(ref this));
         }
 
-        public int GetSystemFontCollection(void* fontCollection, int checkForUpdate)
+        public int GetSystemFontCollection(IDWriteFontCollection** fontCollection, int checkForUpdates = 0)
         {
-            var function = (delegate* unmanaged<IDWriteFactory*, void*, int, int>)Vtbl[3];
-
-            fixed (IDWriteFactory* handle = &this)
-            {
-                return function(handle, fontCollection, checkForUpdate);
-            }
+            return ((delegate* unmanaged<IDWriteFactory*, IDWriteFontCollection**, int, int>)(lpVtbl[3]))((IDWriteFactory*)Unsafe.AsPointer(ref this), fontCollection, checkForUpdates);
         }
 
-        internal int CreateCustomFontCollection(IDWriteFontCollectionLoader* collectionLoader, void* collectionKey, uint collectionKeySize, IDWriteFontCollection** fontCollection)
+        public int CreateCustomFontCollection(IDWriteFontCollectionLoader* collectionLoader, void* collectionKey, uint collectionKeySize, IDWriteFontCollection** fontCollection)
         {
-            var function = (delegate* unmanaged<IDWriteFactory*, IDWriteFontCollectionLoader*, void*, uint, IDWriteFontCollection**, int>)Vtbl[4];
-
-            fixed (IDWriteFactory* handle = &this)
-            {
-                return function(handle, collectionLoader, collectionKey, collectionKeySize, fontCollection);
-            }
+            return ((delegate* unmanaged<IDWriteFactory*, IDWriteFontCollectionLoader*, void*, uint, IDWriteFontCollection**, int>)(lpVtbl[4]))((IDWriteFactory*)Unsafe.AsPointer(ref this), collectionLoader, collectionKey, collectionKeySize, fontCollection);
         }
 
-        internal int CreateTextAnalyzer(IDWriteTextAnalyzer** textAnalyzer)
+        public int RegisterFontCollectionLoader(IDWriteFontCollectionLoader* fontCollectionLoader)
         {
-            var function = (delegate* unmanaged<IDWriteFactory*, IDWriteTextAnalyzer**, int>)Vtbl[21];
+            return ((delegate* unmanaged<IDWriteFactory*, IDWriteFontCollectionLoader*, int>)(lpVtbl[5]))((IDWriteFactory*)Unsafe.AsPointer(ref this), fontCollectionLoader);
+        }
 
-            fixed (IDWriteFactory* handle = &this)
-            {
-                int hr = function(handle, textAnalyzer);
+        public int CreateFontFace(DWRITE_FONT_FACE_TYPE fontFaceType, uint numberOfFiles, IDWriteFontFile** fontFiles, uint faceIndex, DWRITE_FONT_SIMULATIONS fontFaceSimulationFlags, IDWriteFontFace** fontFace)
+        {
+            return ((delegate* unmanaged<IDWriteFactory*, DWRITE_FONT_FACE_TYPE, uint, IDWriteFontFile**, uint, DWRITE_FONT_SIMULATIONS, IDWriteFontFace**, int>)(lpVtbl[9]))((IDWriteFactory*)Unsafe.AsPointer(ref this), fontFaceType, numberOfFiles, fontFiles, faceIndex, fontFaceSimulationFlags, fontFace);
+        }
 
-                return hr;
-            }
+        public int RegisterFontFileLoader(IDWriteFontFileLoader* fontFileLoader)
+        {
+            return ((delegate* unmanaged<IDWriteFactory*, IDWriteFontFileLoader*, int>)(lpVtbl[13]))((IDWriteFactory*)Unsafe.AsPointer(ref this), fontFileLoader);
+        }
+
+        public int CreateTextAnalyzer(IDWriteTextAnalyzer** textAnalyzer)
+        {
+            return ((delegate* unmanaged<IDWriteFactory*, IDWriteTextAnalyzer**, int>)(lpVtbl[21]))((IDWriteFactory*)Unsafe.AsPointer(ref this), textAnalyzer);
         }
     }
 }
