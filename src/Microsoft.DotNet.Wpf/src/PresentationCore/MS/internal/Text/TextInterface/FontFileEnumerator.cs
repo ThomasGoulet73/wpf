@@ -10,7 +10,7 @@ namespace MS.Internal.Text.TextInterface
 {
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-    internal unsafe class FontFileEnumerator
+    internal unsafe class FontFileEnumerator : IDWriteFontFileEnumeratorMirror
     {
         private const int S_OK = unchecked((int)0L);
         private const int E_INVALIDARG = unchecked((int)0x80070057L);
@@ -28,7 +28,7 @@ namespace MS.Internal.Text.TextInterface
         }
 
         [ComVisible(true)]
-        int MoveNext(int* hasCurrentFile)
+        public int MoveNext(int* hasCurrentFile)
         {
             int hr = S_OK;
             try
@@ -44,7 +44,7 @@ namespace MS.Internal.Text.TextInterface
             return hr;
         }
 
-        int GetCurrentFontFile(IDWriteFontFile** fontFile) 
+        public int GetCurrentFontFile(IDWriteFontFile** fontFile) 
         {
             if (fontFile == null)
             {
