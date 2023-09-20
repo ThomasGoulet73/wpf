@@ -287,14 +287,8 @@ namespace System.Windows.Xps.Serialization
             Object                        serializedObject
             )
         {
-            if(manager == null)
-            {
-                throw new ArgumentNullException("manager");
-            }
-            if(serializedObject == null)
-            {
-                throw new ArgumentNullException("manager");
-            }
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(serializedObject);
 
             this._serializationManager      = manager;
             this._serializedObject          = serializedObject;
@@ -990,7 +984,7 @@ namespace System.Windows.Xps.Serialization
                     XpsOMPackagingPolicy omPolicy = SerializationManager.PackagingPolicy as XpsOMPackagingPolicy;
                     if (policy == null && omPolicy == null)
                     {
-                        throw new XpsSerializationException(SR.Get(SRID.ReachSerialization_WrongPackagingPolicy));
+                        throw new XpsSerializationException(SR.ReachSerialization_WrongPackagingPolicy);
                     }
 
                     Uri documentUri = SerializationManager.PackagingPolicy.CurrentFixedDocumentUri;

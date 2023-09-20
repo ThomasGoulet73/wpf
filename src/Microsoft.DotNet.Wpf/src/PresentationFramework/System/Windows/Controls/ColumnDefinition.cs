@@ -85,21 +85,18 @@ namespace System.Windows.Controls
         /// </summary>
         void ICollection.CopyTo(Array array, int index)
         {
-            if (array == null)
-            {
-                throw new ArgumentNullException("array");
-            }
+            ArgumentNullException.ThrowIfNull(array);
             if (array.Rank != 1)
             {
-                throw new ArgumentException(SR.Get(SRID.GridCollection_DestArrayInvalidRank));
+                throw new ArgumentException(SR.GridCollection_DestArrayInvalidRank);
             }
             if (index < 0)
             {
-                throw new ArgumentOutOfRangeException(SR.Get(SRID.GridCollection_DestArrayInvalidLowerBound, "index"));
+                throw new ArgumentOutOfRangeException(SR.Format(SR.GridCollection_DestArrayInvalidLowerBound, "index"));
             }
             if (array.Length - index < _size)
             {
-                throw new ArgumentException(SR.Get(SRID.GridCollection_DestArrayInvalidLength, "array"));
+                throw new ArgumentException(SR.Format(SR.GridCollection_DestArrayInvalidLength, "array"));
             }
 
             if (_size > 0)
@@ -114,17 +111,14 @@ namespace System.Windows.Controls
         /// </summary>
         public void CopyTo(ColumnDefinition[] array, int index) //  void ICollection<T>.CopyTo(T[] array, int arrayIndex)
         {
-            if (array == null)
-            {
-                throw new ArgumentNullException("array");
-            }
+            ArgumentNullException.ThrowIfNull(array);
             if (index < 0)
             {
-                throw new ArgumentOutOfRangeException(SR.Get(SRID.GridCollection_DestArrayInvalidLowerBound, "index"));
+                throw new ArgumentOutOfRangeException(SR.Format(SR.GridCollection_DestArrayInvalidLowerBound, "index"));
             }
             if (array.Length - index < _size)
             {
-                throw new ArgumentException(SR.Get(SRID.GridCollection_DestArrayInvalidLength, "array"));
+                throw new ArgumentException(SR.Format(SR.GridCollection_DestArrayInvalidLength, "array"));
             }
 
             if (_size > 0)
@@ -244,7 +238,7 @@ namespace System.Windows.Controls
             PrivateVerifyWriteAccess();
             if (index < 0 || index > _size)
             {
-                throw new ArgumentOutOfRangeException(SR.Get(SRID.TableCollectionOutOfRange));
+                throw new ArgumentOutOfRangeException(SR.TableCollectionOutOfRange);
             }
             PrivateValidateValueForAddition(value);
             PrivateInsert(index, value as ColumnDefinition);
@@ -258,7 +252,7 @@ namespace System.Windows.Controls
             PrivateVerifyWriteAccess();
             if (index < 0 || index > _size)
             {
-                throw new ArgumentOutOfRangeException(SR.Get(SRID.TableCollectionOutOfRange));
+                throw new ArgumentOutOfRangeException(SR.TableCollectionOutOfRange);
             }
             PrivateValidateValueForAddition(value);
             PrivateInsert(index, value);
@@ -302,7 +296,7 @@ namespace System.Windows.Controls
             PrivateVerifyWriteAccess();
             if (index < 0 || index >= _size) 
             {
-                throw new ArgumentOutOfRangeException(SR.Get(SRID.TableCollectionOutOfRange));
+                throw new ArgumentOutOfRangeException(SR.TableCollectionOutOfRange);
             }
             PrivateRemove(_items[index]);
         }
@@ -321,15 +315,15 @@ namespace System.Windows.Controls
             PrivateVerifyWriteAccess();
             if (index < 0 || index >= _size) 
             {
-                throw new ArgumentOutOfRangeException(SR.Get(SRID.TableCollectionOutOfRange));
+                throw new ArgumentOutOfRangeException(SR.TableCollectionOutOfRange);
             }
             if (count < 0)
             {
-                throw new ArgumentOutOfRangeException(SR.Get(SRID.TableCollectionCountNeedNonNegNum));
+                throw new ArgumentOutOfRangeException(SR.TableCollectionCountNeedNonNegNum);
             }
             if (_size - index < count)
             {
-                throw new ArgumentException(SR.Get(SRID.TableCollectionRangeOutOfRange));
+                throw new ArgumentException(SR.TableCollectionRangeOutOfRange);
             }
 
             PrivateOnModified();
@@ -446,7 +440,7 @@ namespace System.Windows.Controls
             {
                 if (index < 0 || index >= _size)
                 {
-                    throw new ArgumentOutOfRangeException(SR.Get(SRID.TableCollectionOutOfRange));
+                    throw new ArgumentOutOfRangeException(SR.TableCollectionOutOfRange);
                 }
                 return (_items[index]);
             }
@@ -456,7 +450,7 @@ namespace System.Windows.Controls
                 PrivateValidateValueForAddition(value);
                 if (index < 0 || index >= _size)
                 {
-                    throw new ArgumentOutOfRangeException(SR.Get(SRID.TableCollectionOutOfRange));
+                    throw new ArgumentOutOfRangeException(SR.TableCollectionOutOfRange);
                 }
                 PrivateDisconnectChild(_items[index]);
                 PrivateConnectChild(index, value as ColumnDefinition);
@@ -472,7 +466,7 @@ namespace System.Windows.Controls
             {
                 if (index < 0 || index >= _size)
                 {
-                    throw new ArgumentOutOfRangeException(SR.Get(SRID.TableCollectionOutOfRange));
+                    throw new ArgumentOutOfRangeException(SR.TableCollectionOutOfRange);
                 }
                 return ((ColumnDefinition)_items[index]);
             }
@@ -482,7 +476,7 @@ namespace System.Windows.Controls
                 PrivateValidateValueForAddition(value);
                 if (index < 0 || index >= _size)
                 {
-                    throw new ArgumentOutOfRangeException(SR.Get(SRID.TableCollectionOutOfRange));
+                    throw new ArgumentOutOfRangeException(SR.TableCollectionOutOfRange);
                 }
                 PrivateDisconnectChild(_items[index]);
                 PrivateConnectChild(index, value);
@@ -550,7 +544,7 @@ namespace System.Windows.Controls
         {
             if (this.IsReadOnly)
             {
-                throw new InvalidOperationException(SR.Get(SRID.GridCollection_CannotModifyReadOnly, "ColumnDefinitionCollection"));
+                throw new InvalidOperationException(SR.Format(SR.GridCollection_CannotModifyReadOnly, "ColumnDefinitionCollection"));
             }
         }
 
@@ -559,21 +553,18 @@ namespace System.Windows.Controls
         /// </summary>
         private void PrivateValidateValueForAddition(object value)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException("value");
-            }
-            
+            ArgumentNullException.ThrowIfNull(value);
+
             ColumnDefinition item = value as ColumnDefinition;
 
             if (item == null)
             {
-                throw new ArgumentException(SR.Get(SRID.GridCollection_MustBeCertainType, "ColumnDefinitionCollection", "ColumnDefinition"));
+                throw new ArgumentException(SR.Format(SR.GridCollection_MustBeCertainType, "ColumnDefinitionCollection", "ColumnDefinition"));
             }
 
             if (item.Parent != null)
             {
-                throw new ArgumentException(SR.Get(SRID.GridCollection_InOtherCollection, "value", "ColumnDefinitionCollection"));
+                throw new ArgumentException(SR.Format(SR.GridCollection_InOtherCollection, "value", "ColumnDefinitionCollection"));
             }
         }
 
@@ -583,16 +574,13 @@ namespace System.Windows.Controls
         /// </summary>
         private bool PrivateValidateValueForRemoval(object value)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException("value");
-            }
-            
+            ArgumentNullException.ThrowIfNull(value);
+
             ColumnDefinition item = value as ColumnDefinition;
 
             if (item == null)
             {
-                throw new ArgumentException(SR.Get(SRID.GridCollection_MustBeCertainType, "ColumnDefinitionCollection", "ColumnDefinition"));
+                throw new ArgumentException(SR.Format(SR.GridCollection_MustBeCertainType, "ColumnDefinitionCollection", "ColumnDefinition"));
             }
 
             return (item.Parent == _owner);
@@ -821,12 +809,12 @@ namespace System.Windows.Controls
                         if (_index == -1)
                         {
                             #pragma warning suppress 6503 // IEnumerator.Current is documented to throw this exception
-                            throw new InvalidOperationException(SR.Get(SRID.EnumeratorNotStarted));
+                            throw new InvalidOperationException(SR.EnumeratorNotStarted);
                         }
                         else
                         {
                             #pragma warning suppress 6503 // IEnumerator.Current is documented to throw this exception
-                            throw new InvalidOperationException(SR.Get(SRID.EnumeratorReachedEnd));
+                            throw new InvalidOperationException(SR.EnumeratorReachedEnd);
                         }
                     }
                     return (_currentElement);
@@ -847,12 +835,12 @@ namespace System.Windows.Controls
                         if (_index == -1)
                         {
                             #pragma warning suppress 6503 // IEnumerator.Current is documented to throw this exception
-                            throw new InvalidOperationException(SR.Get(SRID.EnumeratorNotStarted));
+                            throw new InvalidOperationException(SR.EnumeratorNotStarted);
                         }
                         else
                         {
                             #pragma warning suppress 6503 // IEnumerator.Current is documented to throw this exception
-                            throw new InvalidOperationException(SR.Get(SRID.EnumeratorReachedEnd));
+                            throw new InvalidOperationException(SR.EnumeratorReachedEnd);
                         }
                     }
                     return ((ColumnDefinition)_currentElement);
@@ -895,11 +883,11 @@ namespace System.Windows.Controls
             {
                 if (_currentElement == null)
                 {
-                    throw new InvalidOperationException(SR.Get(SRID.EnumeratorCollectionDisposed));
+                    throw new InvalidOperationException(SR.EnumeratorCollectionDisposed);
                 }
                 if (_version != _collection._version)
                 {
-                    throw new InvalidOperationException(SR.Get(SRID.EnumeratorVersionChanged));
+                    throw new InvalidOperationException(SR.EnumeratorVersionChanged);
                 }
             }
 

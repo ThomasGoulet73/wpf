@@ -192,10 +192,7 @@ namespace System.Windows.Documents
         /// </returns>
         internal static string SaveRange(ITextRange range, ref Stream stream, bool useFlowDocumentAsRoot, bool preserveTextElements)
         {
-            if (range == null)
-            {
-                throw new ArgumentNullException("range");
-            }
+            ArgumentNullException.ThrowIfNull(range);
 
             // Create the wpf package in the stream
             WpfPayload wpfPayload = new WpfPayload(/*package:*/null);
@@ -314,10 +311,7 @@ namespace System.Windows.Documents
         /// </remarks>
         internal static object LoadElement(Stream stream)
         {
-            if (stream == null)
-            {
-                throw new ArgumentNullException("stream");
-            }
+            ArgumentNullException.ThrowIfNull(stream);
 
             object xamlObject;
 
@@ -383,7 +377,7 @@ namespace System.Windows.Documents
             PackagePart xamlEntryPart = this.GetWpfEntryPart();
             if (xamlEntryPart == null)
             {
-                throw new XamlParseException(SR.Get(SRID.TextEditorCopyPaste_EntryPartIsMissingInXamlPackage));
+                throw new XamlParseException(SR.TextEditorCopyPaste_EntryPartIsMissingInXamlPackage);
             }
 
             //  Add more validation for package structure
@@ -496,10 +490,7 @@ namespace System.Windows.Documents
         // from the package - from its top level directory.
         internal string AddImage(Image image)
         {
-            if (image == null)
-            {
-                throw new ArgumentNullException("image");
-            }
+            ArgumentNullException.ThrowIfNull(image);
 
             if (image.Source == null)
             {
@@ -508,7 +499,7 @@ namespace System.Windows.Documents
 
             if (string.IsNullOrEmpty(image.Source.ToString()))
             {
-                throw new ArgumentException(SR.Get(SRID.WpfPayload_InvalidImageSource));
+                throw new ArgumentException(SR.WpfPayload_InvalidImageSource);
             }
 
             if (_images == null)

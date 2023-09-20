@@ -17,7 +17,6 @@ using System.Runtime.InteropServices;
 using MS.Internal.PresentationCore;
 
 using SR=MS.Internal.PresentationCore.SR;
-using SRID=MS.Internal.PresentationCore.SRID;
 using UnsafeNativeMethods=MS.Win32.PresentationCore.UnsafeNativeMethods;
 
 
@@ -564,7 +563,7 @@ namespace System.Windows.Media
         {
             if (this.dataStream == null)
             {
-                throw new System.ObjectDisposedException(SR.Get(SRID.Media_StreamClosed));
+                throw new System.ObjectDisposedException(SR.Media_StreamClosed);
             }
         }
         #endregion
@@ -692,10 +691,7 @@ namespace System.Windows.Media
         #region IStreamFrom System.IO.Stream
         internal static IntPtr IStreamFrom(System.IO.Stream stream)
         {
-            if (stream == null)
-            {
-                throw new System.ArgumentNullException("stream");
-            }
+            ArgumentNullException.ThrowIfNull(stream);
 
             IntPtr pStream = IntPtr.Zero;
 

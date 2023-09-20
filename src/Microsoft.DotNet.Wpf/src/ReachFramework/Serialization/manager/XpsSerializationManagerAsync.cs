@@ -76,14 +76,11 @@ namespace System.Windows.Xps.Serialization
             Object  serializedObject
             )
         {
-            if (serializedObject == null)
-            {
-                throw new ArgumentNullException("serializedObject");
-            }
+            ArgumentNullException.ThrowIfNull(serializedObject);
 
-            if(!IsSerializedObjectTypeSupported(serializedObject))
+            if (!IsSerializedObjectTypeSupported(serializedObject))
             {
-                throw new XpsSerializationException(SR.Get(SRID.ReachSerialization_NotSupported));
+                throw new XpsSerializationException(SR.ReachSerialization_NotSupported);
             }
 
             if(Simulator == null)
@@ -129,7 +126,7 @@ namespace System.Windows.Xps.Serialization
                 }
                 else
                 {
-                    throw new XpsSerializationException(SR.Get(SRID.ReachSerialization_NoSerializer));
+                    throw new XpsSerializationException(SR.ReachSerialization_NoSerializer);
                 }
             }
         }
@@ -260,7 +257,7 @@ namespace System.Windows.Xps.Serialization
                             }
                             else
                             {
-                                throw new XpsSerializationException(SR.Get(SRID.ReachSerialization_NoSerializer));
+                                throw new XpsSerializationException(SR.ReachSerialization_NoSerializer);
                             }
                             _isBatchWorkItemInProgress = true;
                         }

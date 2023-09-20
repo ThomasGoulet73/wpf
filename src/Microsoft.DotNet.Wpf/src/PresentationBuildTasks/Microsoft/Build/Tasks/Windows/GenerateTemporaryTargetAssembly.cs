@@ -263,6 +263,9 @@ namespace Microsoft.Build.Tasks.Windows
                 // Add GeneratedCodeFiles to Compile item list.
                 AddNewItems(xmlProjectDoc, CompileTypeName, GeneratedCodeFiles);
 
+                // Add Analyzers to Analyzer item list.
+                AddNewItems(xmlProjectDoc, AnalyzerTypeName, Analyzers);
+
                 // Replace implicit SDK imports with explicit SDK imports
                 ReplaceImplicitImports(xmlProjectDoc); 
 
@@ -274,8 +277,11 @@ namespace Microsoft.Build.Tasks.Windows
                     ( nameof(BaseIntermediateOutputPath), BaseIntermediateOutputPath ),
                     ( nameof(MSBuildProjectExtensionsPath), MSBuildProjectExtensionsPath ),
                     ( "_TargetAssemblyProjectName", Path.GetFileNameWithoutExtension(CurrentProject) ),
-                    ( nameof(Analyzers), Analyzers )
+                    ( nameof(RootNamespace), RootNamespace ),
                 };
+
+                //Removing duplicate AssemblyName
+                RemovePropertiesByName(xmlProjectDoc, nameof(AssemblyName));
 
                 AddNewProperties(xmlProjectDoc, properties);
 
@@ -481,8 +487,27 @@ namespace Microsoft.Build.Tasks.Windows
         /// Required for Source Generator support. May be null.
         /// 
         /// </summary>
-        public string Analyzers 
+        public ITaskItem[] Analyzers 
         { get; set; }
+
+        /// <summary>
+        /// AnalyzerTypeName
+        ///   The appropriate item name which can be accepted by managed compiler task.
+        ///   It is "Analyzer" for now.
+        ///   
+        ///   Adding this property is to make the type name configurable, if it is changed, 
+        ///   No code is required to change in this task, but set a new type name in project file.
+        /// </summary>
+        [Required]
+        public string AnalyzerTypeName { get; set; }
+
+        /// <summary>
+        /// RootNamespace 
+        /// 
+        /// Required for Source Generator support. May be null.
+        /// 
+        /// </summary>
+        public string RootNamespace { get; set; }
 
         /// <summary>
         /// BaseIntermediateOutputPath
@@ -555,10 +580,11 @@ namespace Microsoft.Build.Tasks.Windows
         #region Private Methods
 
         //
-        // Remove specific items from project file. Every item should be under an ItemGroup.
+        // Remove specific entity from project file.
         //
-        private void RemoveItemsByName(XmlDocument xmlProjectDoc, string sItemName)
+        private void RemoveEntityByName(XmlDocument xmlProjectDoc, string sItemName, string groupName)
         {
+            
             if (xmlProjectDoc == null || String.IsNullOrEmpty(sItemName))
             {
                 // When the parameters are not valid, simply return it, instead of throwing exceptions.
@@ -604,7 +630,7 @@ namespace Microsoft.Build.Tasks.Windows
             {
                 XmlElement nodeGroup = root.ChildNodes[i] as XmlElement;
 
-                if (nodeGroup != null && String.Compare(nodeGroup.Name, ITEMGROUP_NAME, StringComparison.OrdinalIgnoreCase) == 0)
+                if (nodeGroup != null && String.Compare(nodeGroup.Name, groupName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     //
                     // This is ItemGroup element.
@@ -655,7 +681,22 @@ namespace Microsoft.Build.Tasks.Windows
                 }
 
             }   // end of "for i" statement.
+        }
+        
+        //
+        // Remove specific items from project file. Every item should be under an ItemGroup.
+        //
+        private void RemoveItemsByName(XmlDocument xmlProjectDoc, string sItemName)
+        {
+            RemoveEntityByName(xmlProjectDoc, sItemName, ITEMGROUP_NAME);
+        }
 
+        //
+        // Remove specific property from project file. Every property should be under an PropertyGroup.
+        //
+        private void RemovePropertiesByName(XmlDocument xmlProjectDoc, string sPropertyName)
+        {
+            RemoveEntityByName(xmlProjectDoc, sPropertyName, PROPERTYGROUP_NAME);
         }
 
         //
@@ -898,6 +939,7 @@ namespace Microsoft.Build.Tasks.Windows
         private const string RESOURCENAME = "Resource";
 
         private const string ITEMGROUP_NAME = "ItemGroup";
+        private const string PROPERTYGROUP_NAME = "PropertyGroup";
         private const string INCLUDE_ATTR_NAME = "Include";
 
         private const string WPFTMP = "wpftmp";

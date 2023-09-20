@@ -99,13 +99,10 @@ namespace System.IO.Packaging
             if (PackUriHelper.ComparePackUri(packUri, BaseUriHelper.PackAppBaseUri) == 0 ||
                 PackUriHelper.ComparePackUri(packUri, BaseUriHelper.SiteOfOriginBaseUri) == 0)
             {
-                throw new ArgumentException(SR.Get(SRID.NotAllowedPackageUri), nameof(uri));
+                throw new ArgumentException(SR.NotAllowedPackageUri, nameof(uri));
             }
 
-            if (package == null)
-            {
-                throw new ArgumentNullException(nameof(package));
-            }
+            ArgumentNullException.ThrowIfNull(package);
 
             lock (_globalLock)
             {
@@ -116,7 +113,7 @@ namespace System.IO.Packaging
 
                 if (_packages.Contains(uri))
                 {
-                    throw new InvalidOperationException(SR.Get(SRID.PackageAlreadyExists));
+                    throw new InvalidOperationException(SR.PackageAlreadyExists);
                 }
                 
                 _packages.Add(uri, package);
@@ -150,14 +147,11 @@ namespace System.IO.Packaging
 
         private static void ValidatePackageUri(Uri uri)
         {
-            if (uri == null)
-            {
-                throw new ArgumentNullException("uri");
-            }
+            ArgumentNullException.ThrowIfNull(uri);
 
             if (!uri.IsAbsoluteUri)
             {
-                throw new ArgumentException(SR.Get(SRID.UriMustBeAbsolute), "uri");
+                throw new ArgumentException(SR.UriMustBeAbsolute, "uri");
             }
         }
         

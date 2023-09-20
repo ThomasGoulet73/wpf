@@ -215,7 +215,7 @@ namespace System.Windows.Xps.Packaging
                 }
                 if ( !Streaming && null != GetXpsDocumentStartingPart(_metroPackage))
                 {
-                    throw new XpsPackagingException( SR.Get( SRID.ReachPackaging_AlreadyHasStartingPart ) );
+                    throw new XpsPackagingException(SR.ReachPackaging_AlreadyHasStartingPart);
                 }
 
                 SetXpsDocumentStartingPart(_metroPackage, value);
@@ -312,15 +312,12 @@ namespace System.Windows.Xps.Packaging
             }
             if (!IsWriter)
             {
-                throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_OnlyWriters));
+                throw new XpsPackagingException(SR.ReachPackaging_OnlyWriters);
             }
-            if (null == contentType)
-            {
-                throw new ArgumentNullException("contentType");
-            }
+            ArgumentNullException.ThrowIfNull(contentType);
             if (0 == contentType.ToString().Length)
             {
-                throw new ArgumentException(SR.Get(SRID.ReachPackaging_InvalidContentType, contentType), "contentType");
+                throw new ArgumentException(SR.Format(SR.ReachPackaging_InvalidContentType, contentType), "contentType");
             }
             
             //Do not compress image Content Types
@@ -368,15 +365,12 @@ namespace System.Windows.Xps.Packaging
             }
             if (!IsWriter)
             {
-                throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_OnlyWriters));
+                throw new XpsPackagingException(SR.ReachPackaging_OnlyWriters);
             }
-            if (null == contentType)
-            {
-                throw new ArgumentNullException("contentType");
-            }
+            ArgumentNullException.ThrowIfNull(contentType);
             if (ContentType.Empty.AreTypeAndSubTypeEqual(contentType))
             {
-                throw new ArgumentException(SR.Get(SRID.ReachPackaging_InvalidType));
+                throw new ArgumentException(SR.ReachPackaging_InvalidType);
             }
 
             //
@@ -420,7 +414,7 @@ namespace System.Windows.Xps.Packaging
             }
             if (!IsWriter)
             {
-                throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_OnlyWriters));
+                throw new XpsPackagingException(SR.ReachPackaging_OnlyWriters);
             }
 
             //
@@ -463,18 +457,9 @@ namespace System.Windows.Xps.Packaging
             PrintTicket     printTicket
             )
         {
-            if (null == relatedPart)
-            {
-                throw new ArgumentNullException("relatedPart");
-            }
-            if (null == metroPart)
-            {
-                throw new ArgumentNullException("metroPart");
-            }
-            if (null == printTicket)
-            {
-                throw new ArgumentNullException("printTicket");
-            }
+            ArgumentNullException.ThrowIfNull(relatedPart);
+            ArgumentNullException.ThrowIfNull(metroPart);
+            ArgumentNullException.ThrowIfNull(printTicket);
 
             //
             // Generate Uri
@@ -527,14 +512,8 @@ namespace System.Windows.Xps.Packaging
             PackagePart     metroPart
             )
         {
-            if (null == relatedPart)
-            {
-                throw new ArgumentNullException("relatedPart");
-            }
-            if (null == metroPart)
-            {
-                throw new ArgumentNullException("metroPart");
-            }
+            ArgumentNullException.ThrowIfNull(relatedPart);
+            ArgumentNullException.ThrowIfNull(metroPart);
             if( Streaming )
             {
                 // Generate Uri
@@ -626,7 +605,7 @@ namespace System.Windows.Xps.Packaging
 
             if( documentPart == null )
             {
-              throw new InvalidDataException(SR.Get(SRID.ReachPackaging_InvalidDocUri));
+              throw new InvalidDataException(SR.ReachPackaging_InvalidDocUri);
             }
 
             ContentType SignitureDefType =
@@ -638,7 +617,7 @@ namespace System.Windows.Xps.Packaging
             {
                 if (SigDefRel != null)
                 {
-                    throw new InvalidDataException(SR.Get(SRID.ReachPackaging_MoreThanOneSigDefParts));
+                    throw new InvalidDataException(SR.ReachPackaging_MoreThanOneSigDefParts);
                 }
 
                 SigDefRel = rel;
@@ -698,7 +677,7 @@ namespace System.Windows.Xps.Packaging
             {
                 if( thumbNailRel != null )
                 {
-                    throw new InvalidDataException(SR.Get(SRID.ReachPackaging_MoreThanOneThumbnailPart));
+                    throw new InvalidDataException(SR.ReachPackaging_MoreThanOneThumbnailPart);
                 }
                 thumbNailRel =  rel;
             }
@@ -718,7 +697,7 @@ namespace System.Windows.Xps.Packaging
 
             if( documentPart == null )
             {
-              throw new InvalidDataException(SR.Get(SRID.ReachPackaging_InvalidDocUri));
+              throw new InvalidDataException(SR.ReachPackaging_InvalidDocUri);
             }
 
             string printTicketRelName =
@@ -730,7 +709,7 @@ namespace System.Windows.Xps.Packaging
             {
                 if (printTicketRel != null)
                 {
-                    throw new InvalidDataException(SR.Get(SRID.ReachPackaging_MoreThanOnePrintTicketPart ));
+                    throw new InvalidDataException(SR.ReachPackaging_MoreThanOnePrintTicketPart);
                 }
 
                 printTicketRel = rel;
@@ -767,12 +746,12 @@ namespace System.Windows.Xps.Packaging
             XpsThumbnail newThumbnail = null;
             if( oldThumbnail != null )
             {
-                throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_AlreadyHasThumbnail));
+                throw new XpsPackagingException(SR.ReachPackaging_AlreadyHasThumbnail);
             }    
             if( !( imageType == XpsImageType.JpegImageType ||
                     imageType == XpsImageType.PngImageType ) )
             {
-                throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_UnsupportedThumbnailImageType));
+                throw new XpsPackagingException(SR.ReachPackaging_UnsupportedThumbnailImageType);
             }   
             newThumbnail = new XpsThumbnail(this,
                                         parent,
@@ -1025,10 +1004,7 @@ namespace System.Windows.Xps.Packaging
             bool                        streaming
             )
         {
-            if (null == metroPackage)
-            {
-                throw new ArgumentNullException("metroPackage");
-            }
+            ArgumentNullException.ThrowIfNull(metroPackage);
 
             _xpsDocument = null;
             _metroPackage = metroPackage;
@@ -1058,10 +1034,7 @@ namespace System.Windows.Xps.Packaging
             object relatedPart
             )
         {
-            if (null == relatedPart)
-            {
-                throw new ArgumentNullException("relatedPart");
-            }
+            ArgumentNullException.ThrowIfNull(relatedPart);
             string uniqueUri = "";
             
             if( relatedPart is XpsFixedDocumentSequenceReaderWriter )
@@ -1094,10 +1067,7 @@ namespace System.Windows.Xps.Packaging
             ContentType contentType
             )
         {
-            if (null == contentType)
-            {
-                throw new ArgumentNullException(nameof(contentType));
-            }
+            ArgumentNullException.ThrowIfNull(contentType);
 
             string uniqueUri = "";
 
@@ -1239,7 +1209,7 @@ namespace System.Windows.Xps.Packaging
         {
             if (ContentType.Empty.AreTypeAndSubTypeEqual(contentType))
             {
-                throw new ArgumentException(SR.Get(SRID.ReachPackaging_InvalidContentType, contentType), "contentType");
+                throw new ArgumentException(SR.Format(SR.ReachPackaging_InvalidContentType, contentType), "contentType");
             }
 
             string key;
@@ -1278,8 +1248,7 @@ namespace System.Windows.Xps.Packaging
             }
             else
             {
-                if (String.CompareOrdinal(contentType.TypeComponent.ToUpper(CultureInfo.InvariantCulture),
-                                          "Image".ToUpper(CultureInfo.InvariantCulture))==0)
+                if (string.Equals(contentType.TypeComponent, "Image", StringComparison.OrdinalIgnoreCase))
                 {
                     key = "Image";
                 }
@@ -1310,7 +1279,7 @@ namespace System.Windows.Xps.Packaging
             {
                 if (propertiesPartRelationship != null)
                 {
-                    throw new InvalidDataException(SR.Get(SRID.ReachPackaging_MoreThanOneMetaDataParts ));
+                    throw new InvalidDataException(SR.ReachPackaging_MoreThanOneMetaDataParts);
                 }
 
                 propertiesPartRelationship = rel;
@@ -1475,7 +1444,7 @@ namespace System.Windows.Xps.Packaging
             {
                 if (startingPartRelationship != null)
                 {
-                    throw new InvalidDataException(SR.Get(SRID.ReachPackaging_MoreThanOneStartingParts));
+                    throw new InvalidDataException(SR.ReachPackaging_MoreThanOneStartingParts);
                 }
 
                 startingPartRelationship = rel;
@@ -1522,23 +1491,20 @@ namespace System.Windows.Xps.Packaging
 
             if (package.FileOpenAccess == FileAccess.Read)
             {
-                throw new IOException(SR.Get(SRID.ReachPackaging_CannotModifyReadOnlyContainer));
+                throw new IOException(SR.ReachPackaging_CannotModifyReadOnlyContainer);
             }
 
             //
             // Throw If the part provided is null
             //
-            if (startingPart == null)
-            {
-                throw new ArgumentNullException("startingPart");
-            }
+            ArgumentNullException.ThrowIfNull(startingPart);
 
             //
             // Throw If the part provided is from a different container
             //
             if (startingPart.Package != package)
             {
-                throw new ArgumentException(SR.Get(SRID.ReachPackaging_PartFromDifferentContainer));
+                throw new ArgumentException(SR.ReachPackaging_PartFromDifferentContainer);
             }
 
                 package.CreateRelationship(startingPart.Uri, TargetMode.Internal, XpsS0Markup.ReachPackageStartingPartRelationshipType);

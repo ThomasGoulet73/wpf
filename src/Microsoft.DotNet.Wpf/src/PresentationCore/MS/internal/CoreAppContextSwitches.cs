@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-﻿//
+//
 //
 
 using System;
@@ -375,6 +375,21 @@ namespace MS.Internal
                 /// switch to be re-evaluated before each render.
                 /// </summary>
                 return LocalAppContext.GetCachedSwitchValue(EnableDynamicDirtyRectanglesSwitchName, ref _EnableDynamicDirtyRectangles);
+            }
+        }
+
+        #endregion
+
+        #region EnableHardwareAccelerationInRdp
+
+        internal const string EnableHardwareAccelerationInRdpSwitchName = "Switch.System.Windows.Media.EnableHardwareAccelerationInRdp";
+        private static int _enableHardwareAccelerationInRdp;
+        public static bool EnableHardwareAccelerationInRdp
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return LocalAppContext.GetCachedSwitchValue(EnableHardwareAccelerationInRdpSwitchName, ref _enableHardwareAccelerationInRdp);
             }
         }
 

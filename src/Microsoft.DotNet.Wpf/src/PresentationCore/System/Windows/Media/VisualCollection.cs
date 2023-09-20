@@ -22,7 +22,6 @@ using MS.Internal;
 using System.Runtime.InteropServices;
 
 using SR=MS.Internal.PresentationCore.SR;
-using SRID=MS.Internal.PresentationCore.SRID;
 
 //------------------------------------------------------------------------------
 //  - There is an exception thrown inside of ConnectChild which could render
@@ -82,10 +81,7 @@ namespace System.Windows.Media
         /// </summary>
         public VisualCollection(Visual parent)
         {
-            if (parent == null)
-            {
-                throw new ArgumentNullException(nameof(parent));
-            }
+            ArgumentNullException.ThrowIfNull(parent);
             _owner = parent;
         }
 
@@ -119,7 +115,7 @@ namespace System.Windows.Media
         {
             if (IsReadOnlyInternal)
             {
-                throw new InvalidOperationException(SR.Get(SRID.VisualCollection_ReadOnly)); 
+                throw new InvalidOperationException(SR.VisualCollection_ReadOnly); 
             }
         }
 
@@ -191,14 +187,11 @@ namespace System.Windows.Media
         {
             VerifyAPIReadOnly();
 
-            if (array == null)
-            {
-                throw new ArgumentNullException(nameof(array));
-            }
+            ArgumentNullException.ThrowIfNull(array);
 
             if (array.Rank != 1)
             {
-                throw new ArgumentException(SR.Get(SRID.Collection_BadRank));
+                throw new ArgumentException(SR.Collection_BadRank);
             }
 
             if ((index < 0) ||
@@ -225,10 +218,7 @@ namespace System.Windows.Media
 
             VerifyAPIReadOnly();
 
-            if (array == null)
-            {
-                throw new ArgumentNullException(nameof(array));
-            }
+            ArgumentNullException.ThrowIfNull(array);
 
             if ((index < 0) ||
                 (array.Length - index < _size))
@@ -279,7 +269,7 @@ namespace System.Windows.Media
                 {
                     if (value < _size)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(value), SR.Get(SRID.VisualCollection_NotEnoughCapacity));
+                        throw new ArgumentOutOfRangeException(nameof(value), SR.VisualCollection_NotEnoughCapacity);
                     }
                     if (value > 0)
                     {
@@ -373,12 +363,12 @@ namespace System.Windows.Media
                 {
                     if (child != null)
                     {
-                        throw new System.ArgumentException(SR.Get(SRID.VisualCollection_EntryInUse));
+                        throw new System.ArgumentException(SR.VisualCollection_EntryInUse);
                     }
                     if ((value._parent != null) // Only a visual that isn't a visual parent or
                         || value.IsRootElement) // are a root node of a visual target can be set into the collection.
                     {
-                        throw new System.ArgumentException(SR.Get(SRID.VisualCollection_VisualHasParent));
+                        throw new System.ArgumentException(SR.VisualCollection_VisualHasParent);
                     }
 
                     ConnectChild(index, value);
@@ -411,7 +401,7 @@ namespace System.Windows.Media
             // might be iterating during a property invalidation tree walk.
             if (_owner.IsVisualChildrenIterationInProgress)
             {
-                throw new InvalidOperationException(SR.Get(SRID.CannotModifyVisualChildrenDuringTreeWalk));
+                throw new InvalidOperationException(SR.CannotModifyVisualChildrenDuringTreeWalk);
             }
 
             Debug.Assert(value != null);
@@ -451,7 +441,7 @@ namespace System.Windows.Media
             // might be iterating during a property invalidation tree walk.
             if (oldParent.IsVisualChildrenIterationInProgress)
             {
-                throw new InvalidOperationException(SR.Get(SRID.CannotModifyVisualChildrenDuringTreeWalk));
+                throw new InvalidOperationException(SR.CannotModifyVisualChildrenDuringTreeWalk);
             }
 
             _items[index] = null;
@@ -479,7 +469,7 @@ namespace System.Windows.Media
                 ((visual._parent != null)   // Only visuals that are not connected to another tree
                  || visual.IsRootElement))  // or a visual target can be added.
             {
-                throw new System.ArgumentException(SR.Get(SRID.VisualCollection_VisualHasParent));
+                throw new System.ArgumentException(SR.VisualCollection_VisualHasParent);
             }
 
 
@@ -728,7 +718,7 @@ namespace System.Windows.Media
                 ((visual._parent != null)   // Only visuals that are not connected to another tree
                  || visual.IsRootElement))  // or a visual target can be added.
             {
-                throw new System.ArgumentException(SR.Get(SRID.VisualCollection_VisualHasParent));
+                throw new System.ArgumentException(SR.VisualCollection_VisualHasParent);
             }
 
             if ((_items == null) || (_size == _items.Length))
@@ -984,7 +974,7 @@ namespace System.Windows.Media
                 }
                 else
                 {
-                    throw new InvalidOperationException(SR.Get(SRID.Enumerator_CollectionChanged));
+                    throw new InvalidOperationException(SR.Enumerator_CollectionChanged);
                 }
             }
 
@@ -1016,13 +1006,13 @@ namespace System.Windows.Media
                         if (_index == -1)
                         {
                             // Not started.
-                            throw new InvalidOperationException(SR.Get(SRID.Enumerator_NotStarted));
+                            throw new InvalidOperationException(SR.Enumerator_NotStarted);
                         }
                         else
                         {
                             // Reached the end.
                             Debug.Assert(_index == -2);
-                            throw new InvalidOperationException(SR.Get(SRID.Enumerator_ReachedEnd));
+                            throw new InvalidOperationException(SR.Enumerator_ReachedEnd);
                         }
                     }
                     return _currentElement;
@@ -1040,7 +1030,7 @@ namespace System.Windows.Media
                 _collection.VerifyAPIReadOnly();
 
                 if (_version != _collection.Version)
-                    throw new InvalidOperationException(SR.Get(SRID.Enumerator_CollectionChanged));
+                    throw new InvalidOperationException(SR.Enumerator_CollectionChanged);
                 _index = -1; // not started.
             }
         }

@@ -160,14 +160,11 @@ namespace MS.Internal.IO.Packaging
 
         private static void ValidateUriKey(Uri uri)
         {
-            if (uri == null)
-            {
-                throw new ArgumentNullException("uri");
-            }
+            ArgumentNullException.ThrowIfNull(uri);
 
             if (!uri.IsAbsoluteUri)
             {
-                throw new ArgumentException(SR.Get(SRID.UriMustBeAbsolute), "uri");
+                throw new ArgumentException(SR.UriMustBeAbsolute, "uri");
             }
         }
 

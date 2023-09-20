@@ -56,14 +56,11 @@ namespace MS.Internal.IO.Packaging
         internal ByteRangeDownloader(Uri requestedUri, string tempFileName, SafeWaitHandle eventHandle)
             : this(requestedUri, eventHandle)
         {
-            if (tempFileName == null)
-            {
-                throw new ArgumentNullException("tempFileName");
-            }
+            ArgumentNullException.ThrowIfNull(tempFileName);
 
             if (tempFileName.Length <= 0)
             {
-                throw new ArgumentException(SR.Get(SRID.InvalidTempFileName), "tempFileName");
+                throw new ArgumentException(SR.InvalidTempFileName, "tempFileName");
             }
 
             _tempFileStream = File.Open(tempFileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
@@ -186,10 +183,7 @@ namespace MS.Internal.IO.Packaging
             // The worker thread will never call dispose nor this method; no need to lock
             CheckDisposed();
 
-            if (byteRanges == null)
-            {
-                throw new ArgumentNullException("byteRanges");
-            }
+            ArgumentNullException.ThrowIfNull(byteRanges);
 
             CheckTwoDimensionalByteRanges(byteRanges);
 
@@ -303,10 +297,7 @@ namespace MS.Internal.IO.Packaging
             set
             {
                 CheckDisposed();
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 if (!_firstRequestMade)
                 {
@@ -314,7 +305,7 @@ namespace MS.Internal.IO.Packaging
                 }
                 else    // Once first request is made it cannot change
                 {
-                    throw new InvalidOperationException(SR.Get(SRID.RequestAlreadyStarted));
+                    throw new InvalidOperationException(SR.RequestAlreadyStarted);
                 }
             }
         }
@@ -345,7 +336,7 @@ namespace MS.Internal.IO.Packaging
                 }
                 else    // Once first request is made it cannot cahnge
                 {
-                    throw new InvalidOperationException(SR.Get(SRID.RequestAlreadyStarted));
+                    throw new InvalidOperationException(SR.RequestAlreadyStarted);
                 }
             }
         }
@@ -402,7 +393,7 @@ namespace MS.Internal.IO.Packaging
         {
             if (_disposed)
             {
-                throw new ObjectDisposedException(null, SR.Get(SRID.ByteRangeDownloaderDisposed));
+                throw new ObjectDisposedException(null, SR.ByteRangeDownloaderDisposed);
             }
         }
 
@@ -411,26 +402,19 @@ namespace MS.Internal.IO.Packaging
         /// </summary>
         private ByteRangeDownloader(Uri requestedUri, SafeWaitHandle eventHandle)
         {
-            if (requestedUri == null)
-            {
-                throw new ArgumentNullException("requestedUri");
-            }
+            ArgumentNullException.ThrowIfNull(requestedUri);
 
             // Ensure uri is correct scheme (http or https) Do case-sensitive comparison since Uri.Scheme contract is to return in lower case only.
-            if (String.Compare(requestedUri.Scheme, Uri.UriSchemeHttp, StringComparison.Ordinal) != 0
-                    && String.Compare(requestedUri.Scheme, Uri.UriSchemeHttps, StringComparison.Ordinal) != 0)
+            if (!string.Equals(requestedUri.Scheme, Uri.UriSchemeHttp, StringComparison.Ordinal) && !string.Equals(requestedUri.Scheme, Uri.UriSchemeHttps, StringComparison.Ordinal))
             {
-                throw new ArgumentException(SR.Get(SRID.InvalidScheme), "requestedUri");
+                throw new ArgumentException(SR.InvalidScheme, "requestedUri");
             }
 
-            if (eventHandle == null)
-            {
-                throw new ArgumentNullException("eventHandle");
-            }
+            ArgumentNullException.ThrowIfNull(eventHandle);
 
             if (eventHandle.IsInvalid || eventHandle.IsClosed)
             {
-                throw new ArgumentException(SR.Get(SRID.InvalidEventHandle), "eventHandle");
+                throw new ArgumentException(SR.InvalidEventHandle, "eventHandle");
             }
 
             _requestedUri = requestedUri;
@@ -446,7 +430,7 @@ namespace MS.Internal.IO.Packaging
         {
             if (_erroredOut)
             {
-                throw new InvalidOperationException(SR.Get(SRID.ByteRangeDownloaderErroredOut), _erroredOutException);
+                throw new InvalidOperationException(SR.ByteRangeDownloaderErroredOut, _erroredOutException);
             }
         }
 
@@ -563,7 +547,7 @@ namespace MS.Internal.IO.Packaging
                         else
                         {
                             _erroredOut = true;
-                            _erroredOutException = new NotSupportedException(SR.Get(SRID.ByteRangeRequestIsNotSupported));
+                            _erroredOutException = new NotSupportedException(SR.ByteRangeRequestIsNotSupported);
                         }
                     }
                     else
@@ -717,14 +701,14 @@ namespace MS.Internal.IO.Packaging
             // The byteRanges should never be less; perf optimization
             if (byteRanges.Length < 2 || (byteRanges.Length % 2) != 0)
             {
-                throw new ArgumentException(SR.Get(SRID.InvalidByteRanges, "byteRanges"));
+                throw new ArgumentException(SR.Format(SR.InvalidByteRanges, "byteRanges"));
             }
 
             for (int i = 0; i < byteRanges.Length; i++)
             {
                 if (byteRanges[i] < 0 || byteRanges[i+1] <= 0)
                 {
-                    throw new ArgumentException(SR.Get(SRID.InvalidByteRanges, "byteRanges"));
+                    throw new ArgumentException(SR.Format(SR.InvalidByteRanges, "byteRanges"));
                 }
                 i++;
             }
@@ -742,14 +726,14 @@ namespace MS.Internal.IO.Packaging
         {
             if (byteRanges.GetLength(0) <= 0 || byteRanges.GetLength(1) != 2)
             {
-                throw new ArgumentException(SR.Get(SRID.InvalidByteRanges, "byteRanges"));
+                throw new ArgumentException(SR.Format(SR.InvalidByteRanges, "byteRanges"));
             }
 
             for (int i = 0; i < byteRanges.GetLength(0); ++i)
             {
                 if (byteRanges[i,Offset_Index] < 0 || byteRanges[i,Length_Index] <= 0)
                 {
-                    throw new ArgumentException(SR.Get(SRID.InvalidByteRanges, "byteRanges"));
+                    throw new ArgumentException(SR.Format(SR.InvalidByteRanges, "byteRanges"));
                 }
             }
         }

@@ -2850,10 +2850,7 @@ namespace System.Xaml
 
             public string GetName(object value)
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
                 return context.GetName(value);
             }
         }
@@ -2997,41 +2994,6 @@ namespace System.Xaml
                 foreach (var property in Properties)
                 {
                     property.FindNamespace(context);
-                }
-            }
-        }
-
-        // need to implement our own Set class to alleviate ties to System.Core.dll
-        // HashSet<T> lives in System.Core.dll
-        class HashSet<T>
-        {
-            Dictionary<T, bool> dictionary;
-
-            public HashSet()
-            {
-                dictionary = new Dictionary<T, bool>();
-            }
-
-            public HashSet(IEqualityComparer<T> comparer)
-            {
-                dictionary = new Dictionary<T, bool>(comparer);
-            }
-
-            public bool Contains(T member)
-            {
-                return dictionary.ContainsKey(member);
-            }
-
-            public bool Add(T member)
-            {
-                if (Contains(member))
-                {
-                    return false;
-                }
-                else
-                {
-                    dictionary.Add(member, true);
-                    return true;
                 }
             }
         }

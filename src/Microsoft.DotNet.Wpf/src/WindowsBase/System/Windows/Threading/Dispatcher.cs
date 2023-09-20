@@ -17,6 +17,8 @@ using MS.Internal.Interop;                   // WM
 using MS.Internal.WindowsBase;               // SecurityHelper
 using System.Threading;
 using System.ComponentModel;                 // EditorBrowsableAttribute, BrowsableAttribute
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 // Disabling 1634 and 1691:
 // In order to avoid generating warnings about unknown message numbers and
@@ -222,7 +224,13 @@ namespace System.Windows.Threading
         {
             if(!CheckAccess())
             {
-                throw new InvalidOperationException(SR.VerifyAccess);
+                // Used to inline VerifyAccess.
+                [DoesNotReturn]
+                [MethodImpl(MethodImplOptions.NoInlining)]
+                static void ThrowVerifyAccess()
+                    => throw new InvalidOperationException(SR.VerifyAccess);
+
+                ThrowVerifyAccess();
             }
         }
 
@@ -304,10 +312,7 @@ namespace System.Windows.Threading
         /// </param>
         public static void PushFrame(DispatcherFrame frame)
         {
-            if(frame == null)
-            {
-                throw new ArgumentNullException("frame");
-            }
+            ArgumentNullException.ThrowIfNull(frame);
 
             Dispatcher dispatcher = Dispatcher.CurrentDispatcher;
             if(dispatcher._hasShutdownFinished) // Dispatcher thread - no lock needed for read
@@ -573,10 +578,7 @@ namespace System.Windows.Threading
         /// </param>
         public void Invoke(Action callback, DispatcherPriority priority, CancellationToken cancellationToken, TimeSpan timeout)
         {
-            if(callback == null)
-            {
-                throw new ArgumentNullException("callback");
-            }
+            ArgumentNullException.ThrowIfNull(callback);
             ValidatePriority(priority, "priority");
 
             if( timeout.TotalMilliseconds < 0 &&
@@ -718,10 +720,7 @@ namespace System.Windows.Threading
         /// </returns>
         public TResult Invoke<TResult>(Func<TResult> callback, DispatcherPriority priority, CancellationToken cancellationToken, TimeSpan timeout)
         {
-            if(callback == null)
-            {
-                throw new ArgumentNullException("callback");
-            }
+            ArgumentNullException.ThrowIfNull(callback);
             ValidatePriority(priority, "priority");
 
             if( timeout.TotalMilliseconds < 0 &&
@@ -834,10 +833,7 @@ namespace System.Windows.Threading
         /// </returns>
         public DispatcherOperation InvokeAsync(Action callback, DispatcherPriority priority, CancellationToken cancellationToken)
         {
-            if(callback == null)
-            {
-                throw new ArgumentNullException("callback");
-            }
+            ArgumentNullException.ThrowIfNull(callback);
             ValidatePriority(priority, "priority");
 
             DispatcherOperation operation = new DispatcherOperation(this, priority, callback);
@@ -907,10 +903,7 @@ namespace System.Windows.Threading
         /// </returns>
         public DispatcherOperation<TResult> InvokeAsync<TResult>(Func<TResult> callback, DispatcherPriority priority, CancellationToken cancellationToken)
         {
-            if(callback == null)
-            {
-                throw new ArgumentNullException("callback");
-            }
+            ArgumentNullException.ThrowIfNull(callback);
             ValidatePriority(priority, "priority");
 
             DispatcherOperation<TResult> operation = new DispatcherOperation<TResult>(this, priority, callback);
@@ -922,10 +915,7 @@ namespace System.Windows.Threading
         private DispatcherOperation LegacyBeginInvokeImpl(DispatcherPriority priority, Delegate method, object args, int numArgs)
         {
             ValidatePriority(priority, "priority");
-            if(method == null)
-            {
-                throw new ArgumentNullException("method");
-            }
+            ArgumentNullException.ThrowIfNull(method);
 
             DispatcherOperation operation = new DispatcherOperation(this, method, priority, args, numArgs);
             InvokeAsyncImpl(operation, CancellationToken.None);
@@ -1278,12 +1268,9 @@ namespace System.Windows.Threading
                 throw new ArgumentException(SR.InvalidPriority, "priority");
             }
 
-            if(method == null)
-            {
-                throw new ArgumentNullException("method");
-            }
+            ArgumentNullException.ThrowIfNull(method);
 
-            if( timeout.TotalMilliseconds < 0 &&
+            if ( timeout.TotalMilliseconds < 0 &&
                 timeout != TimeSpan.FromMilliseconds(-1))
             {
                 if(CheckAccess())

@@ -62,11 +62,13 @@
     <Compile Include="$(WpfSharedDir)\Telemetry\Managed\TraceLoggers\ControlsTraceLogger.cs" />
     <Compile Include="MarshalLocal.cs" />
     <Compile Include="Microsoft\Win32\CommonDialog.cs" />
+    <Compile Include="Microsoft\Win32\CommonItemDialog.cs" />
     <Compile Include="Microsoft\Win32\FileDialog.cs" />
     <Compile Include="Microsoft\Win32\FileDialogCustomPlace.cs" />
     <Compile Include="Microsoft\Win32\FileDialogCustomPlaces.cs" />
     <Compile Include="Microsoft\Win32\OpenFileDialog.cs" />
     <Compile Include="Microsoft\Win32\SaveFileDialog.cs" />
+    <Compile Include="Microsoft\Win32\OpenFolderDialog.cs" />
     <Compile Include="MS\Internal\AnimatedTypeHelpers.cs" />
     <Compile Include="MS\Internal\Annotations\Anchoring\AttachedAnnotation.cs" />
     <Compile Include="MS\Internal\Annotations\Anchoring\DataIdProcessor.cs" />
@@ -93,7 +95,7 @@
     <Compile Include="MS\Internal\Annotations\Component\HighlightComponent.cs" />
     <Compile Include="MS\Internal\Annotations\Component\IAnnotationComponent.cs" />
     <Compile Include="MS\Internal\Annotations\Component\IHighlightRange.cs" />
-    <Compile Include="MS\Internal\Annotations\Component\MArkedHighlightComponent.cs" />
+    <Compile Include="MS\Internal\Annotations\Component\MarkedHighlightComponent.cs" />
     <Compile Include="MS\Internal\Annotations\Component\PresentationContext.cs" />
     <Compile Include="MS\Internal\Annotations\ObservableDictionary.cs" />
     <Compile Include="MS\Internal\Annotations\OwnedObject.cs" />
@@ -282,7 +284,7 @@
     <Compile Include="MS\Internal\IO\Packaging\indexingfiltermarshaler.cs" />
     <Compile Include="MS\Internal\IO\Packaging\initElementDictionary.cs" />
     <Compile Include="MS\Internal\IO\Packaging\ManagedFilter.cs" />
-    <Compile Include="MS\Internal\IO\Packaging\managedIStream.cs" />
+    <Compile Include="MS\Internal\IO\Packaging\ManagedIStream.cs" />
     <Compile Include="MS\Internal\IO\Packaging\PackageFilter.cs" />
     <Compile Include="MS\Internal\IO\Packaging\UnsafeIndexingFilterStream.cs" />
     <Compile Include="MS\Internal\IO\Packaging\XamlFilter.cs" />
@@ -401,7 +403,6 @@
     <Compile Include="MS\Internal\WindowsRuntime\Windows\Data\Text\WordsSegmenter.cs" />
     <Compile Include="MS\Win32\UxThemeWrapper.cs" />
     <Compile Include="OtherAssemblyAttrs.cs" />
-    <Compile Include="SR.cs" />
     <Compile Include="System\ComponentModel\DesignerProperties.cs" />
     <Compile Include="System\Windows\Annotations\AnchorInfo.cs" />
     <Compile Include="System\Windows\Annotations\Annotation.cs" />
@@ -1198,7 +1199,7 @@
     <Compile Include="System\Windows\Markup\StyleModeStack.cs" />
     <Compile Include="System\Windows\Markup\TemplateComponentConnector.cs" />
     <Compile Include="System\Windows\Markup\TemplateKeyConverter.cs" />
-    <Compile Include="System\Windows\Markup\typecontext.cs" />
+    <Compile Include="System\Windows\Markup\TypeContext.cs" />
     <Compile Include="System\Windows\Markup\WpfXamlLoader.cs" />
     <Compile Include="System\Windows\Markup\XamlBrushSerializer.cs" />
     <Compile Include="System\Windows\Markup\XamlDesignerSerializationManager.cs" />
@@ -1206,7 +1207,7 @@
     <Compile Include="System\Windows\Markup\XamlGridLengthSerializer.cs" />
     <Compile Include="System\Windows\Markup\XamlInstanceCreator.cs" />
     <Compile Include="System\Windows\Markup\XamlInt32CollectionSerializer.cs" />
-    <Compile Include="System\Windows\Markup\xamlnodes.cs" />
+    <Compile Include="System\Windows\Markup\XamlNodes.cs" />
     <Compile Include="System\Windows\Markup\XamlParseException.cs" />
     <Compile Include="System\Windows\Markup\XamlParser.cs" />
     <Compile Include="System\Windows\Markup\XamlPathDataSerializer.cs" />

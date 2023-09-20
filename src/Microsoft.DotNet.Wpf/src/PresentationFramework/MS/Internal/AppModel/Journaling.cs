@@ -539,14 +539,13 @@ namespace MS.Internal.AppModel
         //
         internal override void RestoreState(object contentObject)
         {
-            if (contentObject == null)
-                throw new ArgumentNullException("contentObject");
+            ArgumentNullException.ThrowIfNull(contentObject);
 
             PageFunctionBase pageFunction = (PageFunctionBase)contentObject;
 
             if (pageFunction == null)
             {
-                throw new Exception(SR.Get(SRID.InvalidPageFunctionType, contentObject.GetType()));
+                throw new Exception(SR.Format(SR.InvalidPageFunctionType, contentObject.GetType()));
             }
 
             pageFunction.ParentPageFunctionId = ParentPageFunctionId;
@@ -687,7 +686,7 @@ namespace MS.Internal.AppModel
             }
             catch (Exception ex)
             {
-                throw new Exception(SR.Get(SRID.FailedResumePageFunction, this._typeName.Value), ex);
+                throw new Exception(SR.Format(SR.FailedResumePageFunction, this._typeName.Value), ex);
             }
 
             InitializeComponent(pageFunction);

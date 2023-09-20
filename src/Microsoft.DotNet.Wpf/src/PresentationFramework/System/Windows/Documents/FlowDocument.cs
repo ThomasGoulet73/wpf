@@ -114,10 +114,7 @@ namespace System.Windows.Documents
         {
             Initialize(null); // null means to create its own TextContainer
 
-            if (block == null)
-            {
-                throw new ArgumentNullException("block");
-            }
+            ArgumentNullException.ThrowIfNull(block);
 
             this.Blocks.Add(block);
         }
@@ -797,7 +794,7 @@ namespace System.Windows.Documents
                             if (_structuralCache.IsFormattingInProgress)
                             {
                                 _structuralCache.OnInvalidOperationDetected();
-                                throw new InvalidOperationException(SR.Get(SRID.FlowDocumentInvalidContnetChange));
+                                throw new InvalidOperationException(SR.FlowDocumentInvalidContnetChange);
                             }
 
                             // None of FlowDocument properties can invalidate structural caches (the NameTable),
@@ -1397,7 +1394,7 @@ namespace System.Windows.Documents
             if (_structuralCache.IsFormattingInProgress)
             {
                 _structuralCache.OnInvalidOperationDetected();
-                throw new InvalidOperationException(SR.Get(SRID.FlowDocumentInvalidContnetChange));
+                throw new InvalidOperationException(SR.FlowDocumentInvalidContnetChange);
             }
 
             // The only supported highlight type for FlowDocument is SpellerHightlight.
@@ -1450,7 +1447,7 @@ namespace System.Windows.Documents
             if (_structuralCache.IsFormattingInProgress)
             {
                 _structuralCache.OnInvalidOperationDetected();
-                throw new InvalidOperationException(SR.Get(SRID.FlowDocumentInvalidContnetChange));
+                throw new InvalidOperationException(SR.FlowDocumentInvalidContnetChange);
             }
 
             // Remember the fact that content is changing.
@@ -1485,7 +1482,7 @@ namespace System.Windows.Documents
                 if (_structuralCache.IsFormattingInProgress)
                 {
                     _structuralCache.OnInvalidOperationDetected();
-                    throw new InvalidOperationException(SR.Get(SRID.FlowDocumentInvalidContnetChange));
+                    throw new InvalidOperationException(SR.FlowDocumentInvalidContnetChange);
                 }
 
                 // Since content is changeing, do partial invalidation of BreakRecordTable.
@@ -1638,20 +1635,17 @@ namespace System.Windows.Documents
         ///</param>
         void IAddChild.AddChild(Object value)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException("value");
-            }
+            ArgumentNullException.ThrowIfNull(value);
 
             if (!TextSchema.IsValidChildOfContainer(/*parentType:*/_typeofThis, /*childType:*/value.GetType()))
             {
-                throw new ArgumentException(SR.Get(SRID.TextSchema_ChildTypeIsInvalid, _typeofThis.Name, value.GetType().Name));
+                throw new ArgumentException(SR.Format(SR.TextSchema_ChildTypeIsInvalid, _typeofThis.Name, value.GetType().Name));
             }
 
             // Checking that the element inserted does not have a parent
             if (value is TextElement && ((TextElement)value).Parent != null)
             {
-                throw new ArgumentException(SR.Get(SRID.TextSchema_TheChildElementBelongsToAnotherTreeAlready, value.GetType().Name));
+                throw new ArgumentException(SR.Format(SR.TextSchema_TheChildElementBelongsToAnotherTreeAlready, value.GetType().Name));
             }
 
             if (value is Block)
@@ -1701,10 +1695,7 @@ namespace System.Windows.Documents
         /// </returns>
         object IServiceProvider.GetService(Type serviceType)
         {
-            if (serviceType == null)
-            {
-                throw new ArgumentNullException("serviceType");
-            }
+            ArgumentNullException.ThrowIfNull(serviceType);
             if (serviceType == typeof(ITextContainer))
             {
                 return _structuralCache.TextContainer;

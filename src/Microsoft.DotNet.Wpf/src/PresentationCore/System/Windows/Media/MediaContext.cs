@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-﻿//
+//
 //
 // Description:
 //      The MediaContext class controls the media layer.
@@ -33,7 +33,6 @@ using MS.Win32;
 using Microsoft.Win32.SafeHandles;
 
 using SR=MS.Internal.PresentationCore.SR;
-using SRID=MS.Internal.PresentationCore.SRID;
 
 namespace System.Windows.Media
 {
@@ -427,7 +426,7 @@ namespace System.Windows.Media
                 // It's never correct to not have an event handler hooked up in
                 // the case when an invalid shader is encountered.  Raise an
                 // exception directing the app to hook up an event handler.
-                throw new InvalidOperationException(SR.Get(SRID.MediaContext_NoBadShaderHandler));
+                throw new InvalidOperationException(SR.MediaContext_NoBadShaderHandler);
             }
         }
 
@@ -450,9 +449,9 @@ namespace System.Windows.Media
             case HRESULT.E_OUTOFMEMORY:
                 throw new System.OutOfMemoryException();
             case HRESULT.D3DERR_OUTOFVIDEOMEMORY:
-                throw new System.OutOfMemoryException(SR.Get(SRID.MediaContext_OutOfVideoMemory));
+                throw new System.OutOfMemoryException(SR.MediaContext_OutOfVideoMemory);
             default:
-                throw new System.InvalidOperationException(SR.Get(SRID.MediaContext_RenderThreadError));
+                throw new System.InvalidOperationException(SR.MediaContext_RenderThreadError);
             }
         }
 
@@ -996,10 +995,9 @@ namespace System.Windows.Media
                     if (Channel != null)
                     {
                         // SyncFlush will Commit()
-                        if (CommittingBatch != null)
-                        {
-                            CommittingBatch(Channel, new EventArgs());
-                        }
+
+                        CommittingBatch?.Invoke(Channel, new EventArgs());
+                        
 
                         Channel.SyncFlush();
                     }
@@ -1822,7 +1820,7 @@ namespace System.Windows.Media
                     tickLoopCount++;
                     if (tickLoopCount > 153)
                     {
-                        throw new InvalidOperationException(SR.Get(SRID.MediaContext_InfiniteTickLoop));
+                        throw new InvalidOperationException(SR.MediaContext_InfiniteTickLoop);
                     }
 
                     _timeManager.Tick();
@@ -1849,7 +1847,7 @@ namespace System.Windows.Media
                         // (TimeManager gets its tick time from MediaContext's IClock implementation).
                         // In the case where we can't query QPC or aren't doing interlocked presents,
                         // this will be equal to the current time, which is a good enough approximation.
-                        Rendering(this.Dispatcher, new RenderingEventArgs(_timeManager.LastTickTime));
+                        Rendering?.Invoke(this.Dispatcher, new RenderingEventArgs(_timeManager.LastTickTime));
 
                         // call all render callbacks again in case the Rendering event affects layout
                         // this will enable layout effecting changes to get triggered this frame
@@ -1961,7 +1959,7 @@ namespace System.Windows.Media
                     callbackLoopCount++;
                     if (callbackLoopCount > 153)
                     {
-                        throw new InvalidOperationException(SR.Get(SRID.MediaContext_InfiniteLayoutLoop));
+                        throw new InvalidOperationException(SR.MediaContext_InfiniteLayoutLoop);
                     }
 
                     FrugalObjectList<InvokeOnRenderCallback> callbacks = _invokeOnRenderCallbacks;
@@ -2185,10 +2183,7 @@ namespace System.Windows.Media
                     _lastCommitTime = currentTicks;
                 }
 
-                if (CommittingBatch != null)
-                {
-                    CommittingBatch(Channel, new EventArgs());
-                }
+                CommittingBatch?.Invoke(Channel, new EventArgs());
 
                 Channel.Commit();
 
@@ -2266,10 +2261,8 @@ namespace System.Windows.Media
                         do
                         {
                             // WaitForNextMessage will Commit()
-                            if (CommittingBatch != null)
-                            {
-                                CommittingBatch(Channel, new EventArgs());
-                            }
+                            CommittingBatch?.Invoke(Channel, new EventArgs());
+                            
 
                             Channel.WaitForNextMessage();
                             NotifyChannelMessage();
@@ -2309,10 +2302,8 @@ namespace System.Windows.Media
                 else
                 {
                     // SyncFlush() will Commit()
-                    if (CommittingBatch != null)
-                    {
-                        CommittingBatch(Channel, new EventArgs());
-                    }
+                    CommittingBatch?.Invoke(Channel, new EventArgs());
+                    
 
                     //
                     // Issue a sync flush, which will only return after
@@ -2341,7 +2332,7 @@ namespace System.Windows.Media
         {
             if (!WriteAccessEnabled)
             {
-                throw new InvalidOperationException(SR.Get(SRID.MediaContext_APINotAllowed));
+                throw new InvalidOperationException(SR.MediaContext_APINotAllowed);
             }
         }
 

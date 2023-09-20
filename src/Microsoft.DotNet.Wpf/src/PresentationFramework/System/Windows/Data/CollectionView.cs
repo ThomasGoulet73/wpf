@@ -57,8 +57,7 @@ namespace System.Windows.Data
 
         internal CollectionView(IEnumerable collection, int moveToFirst)
         {
-            if (collection == null)
-                throw new ArgumentNullException("collection");
+            ArgumentNullException.ThrowIfNull(collection);
 
             // Constructing a CollectionView itself (as opposed to a derived class)
             // is deprecated in NetFx3.5.  This used to use IndexedEnumerable to
@@ -170,8 +169,7 @@ namespace System.Windows.Data
             get { return _culture; }
             set
             {
-                if (value == null)
-                    throw new ArgumentNullException("value");
+                ArgumentNullException.ThrowIfNull(value);
 
                 if (_culture != value)
                 {
@@ -308,7 +306,7 @@ namespace System.Windows.Data
         {
             IEditableCollectionView ecv = this as IEditableCollectionView;
             if (ecv != null && (ecv.IsAddingNew || ecv.IsEditingItem))
-                throw new InvalidOperationException(SR.Get(SRID.MemberNotAllowedDuringAddOrEdit, "Refresh"));
+                throw new InvalidOperationException(SR.Format(SR.MemberNotAllowedDuringAddOrEdit, "Refresh"));
 
             RefreshInternal();
         }
@@ -334,7 +332,7 @@ namespace System.Windows.Data
 
             IEditableCollectionView ecv = this as IEditableCollectionView;
             if (ecv != null && (ecv.IsAddingNew || ecv.IsEditingItem))
-                throw new InvalidOperationException(SR.Get(SRID.MemberNotAllowedDuringAddOrEdit, "DeferRefresh"));
+                throw new InvalidOperationException(SR.Format(SR.MemberNotAllowedDuringAddOrEdit, "DeferRefresh"));
 
             ++ _deferLevel;
             return new DeferHelper(this);
@@ -845,7 +843,7 @@ namespace System.Windows.Data
         protected virtual void RefreshOverride()
         {
             if (SortDescriptions.Count > 0)
-                throw new InvalidOperationException(SR.Get(SRID.ImplementOtherMembersWithSort, "Refresh()"));
+                throw new InvalidOperationException(SR.Format(SR.ImplementOtherMembersWithSort, "Refresh()"));
 
             object oldCurrentItem = _currentItem;
             bool oldIsCurrentAfterLast = CheckFlag(CollectionViewFlags.IsCurrentAfterLast);
@@ -900,7 +898,7 @@ namespace System.Windows.Data
             VerifyRefreshNotDeferred();
 
             if (SortDescriptions.Count > 0)
-                throw new InvalidOperationException(SR.Get(SRID.ImplementOtherMembersWithSort, "GetEnumerator()"));
+                throw new InvalidOperationException(SR.Format(SR.ImplementOtherMembersWithSort, "GetEnumerator()"));
 
             return EnumerableWrapper.GetEnumerator();
         }
@@ -918,8 +916,7 @@ namespace System.Windows.Data
         /// </param>
         protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
         {
-            if (args == null)
-                throw new ArgumentNullException("args");
+            ArgumentNullException.ThrowIfNull(args);
 
             unchecked { ++ _timestamp; }    // invalidate enumerators because of a change
 
@@ -1031,8 +1028,7 @@ namespace System.Windows.Data
         /// </exception>
         protected virtual void OnCurrentChanging(CurrentChangingEventArgs args)
         {
-            if (args == null)
-                throw new ArgumentNullException("args");
+            ArgumentNullException.ThrowIfNull(args);
 
             if (_currentChangedMonitor.Busy)
             {
@@ -1175,7 +1171,7 @@ namespace System.Windows.Data
                 if (!AllowsCrossThreadChanges)
                 {
                     if (!CheckAccess())
-                        throw new NotSupportedException(SR.Get(SRID.MultiThreadedCollectionChangeNotSupported));
+                        throw new NotSupportedException(SR.MultiThreadedCollectionChangeNotSupported);
                     ProcessCollectionChanged(args);
                 }
                 else
@@ -1435,7 +1431,7 @@ namespace System.Windows.Data
             // state of the underlying data.
 
             if (IsRefreshDeferred)
-                throw new InvalidOperationException(SR.Get(SRID.NoCheckOrChangeWhenDeferred));
+                throw new InvalidOperationException(SR.NoCheckOrChangeWhenDeferred);
 
             #pragma warning restore 6503
             #pragma warning restore 1634, 1691
@@ -1652,7 +1648,7 @@ namespace System.Windows.Data
             public bool MoveNext()
             {
                 if (_timestamp != _collectionView.Timestamp)
-                    throw new InvalidOperationException(SR.Get(SRID.EnumeratorVersionChanged));
+                    throw new InvalidOperationException(SR.EnumeratorVersionChanged);
 
                 switch (_position)
                 {
@@ -1987,33 +1983,33 @@ namespace System.Windows.Data
             {
                 case NotifyCollectionChangedAction.Add:
                     if (e.NewItems.Count != 1)
-                        throw new NotSupportedException(SR.Get(SRID.RangeActionsNotSupported));
+                        throw new NotSupportedException(SR.RangeActionsNotSupported);
                     break;
 
                 case NotifyCollectionChangedAction.Remove:
                     if (e.OldItems.Count != 1)
-                        throw new NotSupportedException(SR.Get(SRID.RangeActionsNotSupported));
+                        throw new NotSupportedException(SR.RangeActionsNotSupported);
                     if (e.OldStartingIndex < 0)
-                        throw new InvalidOperationException(SR.Get(SRID.RemovedItemNotFound));
+                        throw new InvalidOperationException(SR.RemovedItemNotFound);
                     break;
 
                 case NotifyCollectionChangedAction.Replace:
                     if (e.NewItems.Count != 1 || e.OldItems.Count != 1)
-                        throw new NotSupportedException(SR.Get(SRID.RangeActionsNotSupported));
+                        throw new NotSupportedException(SR.RangeActionsNotSupported);
                     break;
 
                 case NotifyCollectionChangedAction.Move:
                     if (e.NewItems.Count != 1)
-                        throw new NotSupportedException(SR.Get(SRID.RangeActionsNotSupported));
+                        throw new NotSupportedException(SR.RangeActionsNotSupported);
                     if (e.NewStartingIndex < 0)
-                        throw new InvalidOperationException(SR.Get(SRID.CannotMoveToUnknownPosition));
+                        throw new InvalidOperationException(SR.CannotMoveToUnknownPosition);
                     break;
 
                 case NotifyCollectionChangedAction.Reset:
                     break;
 
                 default:
-                    throw new NotSupportedException(SR.Get(SRID.UnexpectedCollectionChangeAction, e.Action));
+                    throw new NotSupportedException(SR.Format(SR.UnexpectedCollectionChangeAction, e.Action));
             }
         }
 

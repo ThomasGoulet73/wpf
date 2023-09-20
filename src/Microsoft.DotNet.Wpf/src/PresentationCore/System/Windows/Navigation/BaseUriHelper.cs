@@ -195,7 +195,7 @@ namespace System.Windows.Navigation
                 assembly = ResourceAssembly;
 
                 // The partName returned from GetAssemblyNameAndPart should be escaped.
-                Debug.Assert(String.Compare(partName, uri.GetComponents(UriComponents.Path, UriFormat.UriEscaped), StringComparison.OrdinalIgnoreCase) == 0);
+                Debug.Assert(string.Equals(partName, uri.GetComponents(UriComponents.Path, UriFormat.UriEscaped), StringComparison.OrdinalIgnoreCase));
             }
             else
             {
@@ -285,13 +285,13 @@ namespace System.Windows.Navigation
 
             if (fHasComponent)
             {
-                string[] assemblyInfo = firstSegment.Split(new char[] { COMPONENT_DELIMITER });
+                string[] assemblyInfo = firstSegment.Split(COMPONENT_DELIMITER);
 
                 int count = assemblyInfo.Length;
 
                 if ((count > 4) || (count < 2))
                 {
-                    throw new UriFormatException(SR.Get(SRID.WrongFirstSegment));
+                    throw new UriFormatException(SR.WrongFirstSegment);
                 }
 
                 //
@@ -312,7 +312,7 @@ namespace System.Windows.Navigation
                         }
                         else
                         {
-                            throw new UriFormatException(SR.Get(SRID.WrongFirstSegment));
+                            throw new UriFormatException(SR.WrongFirstSegment);
                         }
                     }
                     else
@@ -323,7 +323,7 @@ namespace System.Windows.Navigation
                         }
                         else
                         {
-                            throw new UriFormatException(SR.Get(SRID.WrongFirstSegment));
+                            throw new UriFormatException(SR.WrongFirstSegment);
                         }
                     }
                 } // end of for loop
@@ -336,7 +336,7 @@ namespace System.Windows.Navigation
         {
             if (component.EndsWith(COMPONENT, StringComparison.OrdinalIgnoreCase))
             {
-                string[] assemblyInfo = component.Split(new Char[] { COMPONENT_DELIMITER });
+                string[] assemblyInfo = component.Split(COMPONENT_DELIMITER);
                 // Check whether the assembly name is the same as the EntryAssembly.
                 int count = assemblyInfo.Length;
                 if ((count >= 2) && (count <= 4))
@@ -347,7 +347,7 @@ namespace System.Windows.Navigation
 
                     if (assembly != null)
                     {
-                        return (String.Compare(SafeSecurityHelper.GetAssemblyPartialName(assembly), assemblyName, StringComparison.OrdinalIgnoreCase) == 0);
+                        return (string.Equals(SafeSecurityHelper.GetAssemblyPartialName(assembly), assemblyName, StringComparison.OrdinalIgnoreCase));
                     }
                     else
                     {
@@ -370,7 +370,7 @@ namespace System.Windows.Navigation
             if (Uri.Compare(sUri, SiteOfOriginBaseUri, UriComponents.Scheme, UriFormat.UriEscaped, StringComparison.OrdinalIgnoreCase) == 0)
             {                
                 Uri packageUri = PackUriHelper.GetPackageUri(sUri);
-                if (String.Compare(packageUri.GetComponents(UriComponents.AbsoluteUri, UriFormat.UriEscaped), _packageSiteOfOriginBaseUriEscaped, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Equals(packageUri.GetComponents(UriComponents.AbsoluteUri, UriFormat.UriEscaped), _packageSiteOfOriginBaseUriEscaped, StringComparison.OrdinalIgnoreCase))
                 {
                     return (new Uri(sUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped))).MakeRelativeUri(sUri);
                 }
@@ -392,7 +392,7 @@ namespace System.Windows.Navigation
             }
             else
             {
-               throw new InvalidOperationException(SR.Get(SRID.CannotNavigateToApplicationResourcesInWebBrowser, packUri));
+               throw new InvalidOperationException(SR.Format(SR.CannotNavigateToApplicationResourcesInWebBrowser, packUri));
             }
         }
 
@@ -550,16 +550,13 @@ namespace System.Windows.Navigation
             Uri baseUri = null;
             DependencyObject doCurrent;
 
-            if (element == null)
-            {
-                throw new ArgumentNullException("element");
-            }
+            ArgumentNullException.ThrowIfNull(element);
 
-                //
-                // Search the tree to find the closest parent which implements
-                // IUriContext or have set value for BaseUri property.
-                //
-                doCurrent = element;
+            //
+            // Search the tree to find the closest parent which implements
+            // IUriContext or have set value for BaseUri property.
+            //
+            doCurrent = element;
 
                 while (doCurrent != null)
                 {

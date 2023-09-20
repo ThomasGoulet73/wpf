@@ -13,7 +13,6 @@ using MS.Internal.PresentationCore;                        // SecurityHelper
 using MS.Internal;
 
 using SR = MS.Internal.PresentationCore.SR;
-using SRID = MS.Internal.PresentationCore.SRID;
 using System.Windows.Input.StylusWisp;
 
 namespace System.Windows.Input
@@ -190,11 +189,11 @@ namespace System.Windows.Input
             // Validate parameters
             if (!RawStylusActionsHelper.IsValid(actions))
             {
-                throw new InvalidEnumArgumentException(SR.Get(SRID.Enum_Invalid, nameof(actions)));
+                throw new InvalidEnumArgumentException(SR.Format(SR.Enum_Invalid, nameof(actions)));
             }
-            if (data == null && actions != RawStylusActions.InRange)
+            if (actions != RawStylusActions.InRange)
             {
-                throw new ArgumentNullException(nameof(data));
+                ArgumentNullException.ThrowIfNull(data);
             }
 
             _actions = actions;
@@ -246,11 +245,11 @@ namespace System.Windows.Input
             // Validate parameters
             if (!RawStylusActionsHelper.IsValid(actions))
             {
-                throw new InvalidEnumArgumentException(SR.Get(SRID.Enum_Invalid, nameof(actions)));
+                throw new InvalidEnumArgumentException(SR.Format(SR.Enum_Invalid, nameof(actions)));
             }
-            if (data == null && actions != RawStylusActions.InRange)
+            if (actions != RawStylusActions.InRange)
             {
-                throw new ArgumentNullException(nameof(data));
+                ArgumentNullException.ThrowIfNull(data);
             }
 
             _actions = actions;

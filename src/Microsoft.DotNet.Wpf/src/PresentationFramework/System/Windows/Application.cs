@@ -127,7 +127,7 @@ namespace System.Windows
                 else
                 {
                     //lock will be released, so no worries about throwing an exception inside the lock
-                    throw new InvalidOperationException(SR.Get(SRID.MultiSingleton));
+                    throw new InvalidOperationException(SR.MultiSingleton);
                 }
             }
 
@@ -382,17 +382,14 @@ namespace System.Windows
         /// <param name="resourceLocator">Resource Locator</param>
         public static void LoadComponent(Object component, Uri resourceLocator)
         {
-            if (component == null)
-                throw new ArgumentNullException("component");
-
-            if (resourceLocator == null)
-                throw new ArgumentNullException("resourceLocator");
+            ArgumentNullException.ThrowIfNull(component);
+            ArgumentNullException.ThrowIfNull(resourceLocator);
 
             if (resourceLocator.OriginalString == null)
-                throw new ArgumentException(SR.Get(SRID.ArgumentPropertyMustNotBeNull,"resourceLocator", "OriginalString"));
+                throw new ArgumentException(SR.Format(SR.ArgumentPropertyMustNotBeNull,"resourceLocator", "OriginalString"));
 
             if (resourceLocator.IsAbsoluteUri == true)
-                throw new ArgumentException(SR.Get(SRID.AbsoluteUriNotAllowed));
+                throw new ArgumentException(SR.AbsoluteUriNotAllowed);
 
             // Passed a relative Uri here.
             // needs to resolve it to Pack://Application.
@@ -454,7 +451,7 @@ namespace System.Windows
                 //
                 if (!MimeTypeMapper.BamlMime.AreTypeAndSubTypeEqual(contentType))
                 {
-                    throw new Exception(SR.Get(SRID.ContentTypeNotSupported, contentType));
+                    throw new Exception(SR.Format(SR.ContentTypeNotSupported, contentType));
                 }
             }
 
@@ -462,7 +459,7 @@ namespace System.Windows
 
             if (bamlStream == null || bamlStream.Assembly != component.GetType().Assembly)
             {
-                throw new Exception(SR.Get(SRID.UriNotMatchWithRootType, component.GetType( ), resourceLocator));
+                throw new Exception(SR.Format(SR.UriNotMatchWithRootType, component.GetType( ), resourceLocator));
             }
 
             XamlReader.LoadBaml(stream, pc, component, bCloseStream);
@@ -475,14 +472,13 @@ namespace System.Windows
         /// <param name="resourceLocator">Resource Locator</param>
         public static object LoadComponent(Uri resourceLocator)
         {
-            if (resourceLocator == null)
-                throw new ArgumentNullException("resourceLocator");
+            ArgumentNullException.ThrowIfNull(resourceLocator);
 
             if (resourceLocator.OriginalString == null)
-                throw new ArgumentException(SR.Get(SRID.ArgumentPropertyMustNotBeNull,"resourceLocator", "OriginalString"));
+                throw new ArgumentException(SR.Format(SR.ArgumentPropertyMustNotBeNull,"resourceLocator", "OriginalString"));
 
             if (resourceLocator.IsAbsoluteUri == true)
-                throw new ArgumentException(SR.Get(SRID.AbsoluteUriNotAllowed));
+                throw new ArgumentException(SR.AbsoluteUriNotAllowed);
 
             return LoadComponent(resourceLocator, false);
         }
@@ -528,7 +524,7 @@ namespace System.Windows
             }
             else
             {
-                throw new Exception(SR.Get(SRID.ContentTypeNotSupported, contentType.ToString()));
+                throw new Exception(SR.Format(SR.ContentTypeNotSupported, contentType.ToString()));
             }
         }
 
@@ -611,15 +607,14 @@ namespace System.Windows
         /// <returns>PackagePart or null</returns>
         public static StreamResourceInfo GetResourceStream(Uri uriResource)
         {
-            if (uriResource == null)
-                throw new ArgumentNullException("uriResource");
+            ArgumentNullException.ThrowIfNull(uriResource);
 
             if (uriResource.OriginalString == null)
-                throw new ArgumentException(SR.Get(SRID.ArgumentPropertyMustNotBeNull, "uriResource", "OriginalString"));
+                throw new ArgumentException(SR.Format(SR.ArgumentPropertyMustNotBeNull, "uriResource", "OriginalString"));
 
             if (uriResource.IsAbsoluteUri == true && !BaseUriHelper.IsPackApplicationUri(uriResource))
             {
-                throw new ArgumentException(SR.Get(SRID.NonPackAppAbsoluteUriNotAllowed));
+                throw new ArgumentException(SR.NonPackAppAbsoluteUriNotAllowed);
             }
 
             ResourcePart part = GetResourceOrContentPart(uriResource) as ResourcePart;
@@ -644,15 +639,14 @@ namespace System.Windows
         /// <returns>PackagePart or null</returns>
         public static StreamResourceInfo GetContentStream(Uri uriContent)
         {
-            if (uriContent == null)
-                throw new ArgumentNullException("uriContent");
+            ArgumentNullException.ThrowIfNull(uriContent);
 
             if (uriContent.OriginalString == null)
-                throw new ArgumentException(SR.Get(SRID.ArgumentPropertyMustNotBeNull, "uriContent", "OriginalString"));
+                throw new ArgumentException(SR.Format(SR.ArgumentPropertyMustNotBeNull, "uriContent", "OriginalString"));
 
             if (uriContent.IsAbsoluteUri == true && !BaseUriHelper.IsPackApplicationUri(uriContent))
             {
-                throw new ArgumentException(SR.Get(SRID.NonPackAppAbsoluteUriNotAllowed));
+                throw new ArgumentException(SR.NonPackAppAbsoluteUriNotAllowed);
             }
 
             ContentFilePart part = GetResourceOrContentPart(uriContent) as ContentFilePart;
@@ -674,17 +668,16 @@ namespace System.Windows
         {
             SiteOfOriginPart sooPart = null;
 
-            if (uriRemote == null)
-                throw new ArgumentNullException("uriRemote");
+            ArgumentNullException.ThrowIfNull(uriRemote);
 
             if (uriRemote.OriginalString == null)
-                throw new ArgumentException(SR.Get(SRID.ArgumentPropertyMustNotBeNull, "uriRemote", "OriginalString"));
+                throw new ArgumentException(SR.Format(SR.ArgumentPropertyMustNotBeNull, "uriRemote", "OriginalString"));
 
             if (uriRemote.IsAbsoluteUri == true)
             {
                 if (BaseUriHelper.SiteOfOriginBaseUri.IsBaseOf(uriRemote) != true)
                 {
-                    throw new ArgumentException(SR.Get(SRID.NonPackSooAbsoluteUriNotAllowed));
+                    throw new ArgumentException(SR.NonPackSooAbsoluteUriNotAllowed);
                 }
             }
 
@@ -878,7 +871,7 @@ namespace System.Windows
                 }
                 if (IsShuttingDown == true || _appIsShutdown == true)
                 {
-                    throw new InvalidOperationException(SR.Get(SRID.ShutdownModeWhenAppShutdown));
+                    throw new InvalidOperationException(SR.ShutdownModeWhenAppShutdown);
                 }
 
                 _shutdownMode = value;
@@ -994,10 +987,7 @@ namespace System.Windows
             set
             {
                 VerifyAccess();
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 _startupUri = value;
             }
@@ -1061,7 +1051,7 @@ namespace System.Windows
                         }
                         else
                         {
-                            throw new InvalidOperationException(SR.Get(SRID.PropertyIsImmutable, "ResourceAssembly", "Application"));
+                            throw new InvalidOperationException(SR.Format(SR.PropertyIsImmutable, "ResourceAssembly", "Application"));
                         }
                     }
                 }
@@ -1649,14 +1639,14 @@ namespace System.Windows
             // throw an exception
             if (_appIsShutdown == true)
             {
-                throw new InvalidOperationException(SR.Get(SRID.CannotCallRunMultipleTimes, this.GetType().FullName));
+                throw new InvalidOperationException(SR.Format(SR.CannotCallRunMultipleTimes, this.GetType().FullName));
             }
 
             if (window != null)
             {
                 if (window.CheckAccess() == false)
                 {
-                    throw new ArgumentException(SR.Get(SRID.WindowPassedShouldBeOnApplicationThread, window.GetType().FullName, this.GetType().FullName));
+                    throw new ArgumentException(SR.Format(SR.WindowPassedShouldBeOnApplicationThread, window.GetType().FullName, this.GetType().FullName));
                 }
 
                 if (WindowsInternal.HasItem(window) == false)
@@ -1979,20 +1969,22 @@ namespace System.Windows
             // and mark it as thread-safe so PackWebResponse won't protect returned streams with a synchronizing wrapper
             PreloadedPackages.AddPackage(PackUriHelper.GetPackageUri(BaseUriHelper.PackAppBaseUri), new ResourceContainer(), true);
 
-            MimeObjectFactory.Register(MimeTypeMapper.BamlMime, new StreamToObjectFactoryDelegate(AppModelKnownContentFactory.BamlConverter));
 
-            StreamToObjectFactoryDelegate xamlFactoryDelegate = new StreamToObjectFactoryDelegate(AppModelKnownContentFactory.XamlConverter);
+            MimeObjectFactory.RegisterCore(MimeTypeMapper.BamlMime, new StreamToObjectFactoryDelegateCore(AppModelKnownContentFactory.BamlConverterCore));
 
-            MimeObjectFactory.Register(MimeTypeMapper.XamlMime, xamlFactoryDelegate);
-            MimeObjectFactory.Register(MimeTypeMapper.FixedDocumentMime, xamlFactoryDelegate);
-            MimeObjectFactory.Register(MimeTypeMapper.FixedDocumentSequenceMime, xamlFactoryDelegate);
-            MimeObjectFactory.Register(MimeTypeMapper.FixedPageMime, xamlFactoryDelegate);
-            MimeObjectFactory.Register(MimeTypeMapper.ResourceDictionaryMime, xamlFactoryDelegate);
+            StreamToObjectFactoryDelegateCore xamlFactoryDelegate = new StreamToObjectFactoryDelegateCore(AppModelKnownContentFactory.XamlConverterCore);
 
-            StreamToObjectFactoryDelegate htmlxappFactoryDelegate = new StreamToObjectFactoryDelegate(AppModelKnownContentFactory.HtmlXappConverter);
-            MimeObjectFactory.Register(MimeTypeMapper.HtmMime, htmlxappFactoryDelegate);
-            MimeObjectFactory.Register(MimeTypeMapper.HtmlMime, htmlxappFactoryDelegate);
-            MimeObjectFactory.Register(MimeTypeMapper.XbapMime, htmlxappFactoryDelegate);
+            MimeObjectFactory.RegisterCore(MimeTypeMapper.XamlMime, xamlFactoryDelegate);
+            MimeObjectFactory.RegisterCore(MimeTypeMapper.FixedDocumentMime, xamlFactoryDelegate);
+            MimeObjectFactory.RegisterCore(MimeTypeMapper.FixedDocumentSequenceMime, xamlFactoryDelegate);
+            MimeObjectFactory.RegisterCore(MimeTypeMapper.FixedPageMime, xamlFactoryDelegate);
+            MimeObjectFactory.RegisterCore(MimeTypeMapper.ResourceDictionaryMime, xamlFactoryDelegate);
+
+            StreamToObjectFactoryDelegateCore htmlxappFactoryDelegate = new StreamToObjectFactoryDelegateCore(AppModelKnownContentFactory.HtmlXappConverterCore);
+            MimeObjectFactory.RegisterCore(MimeTypeMapper.HtmMime, htmlxappFactoryDelegate);
+            MimeObjectFactory.RegisterCore(MimeTypeMapper.HtmlMime, htmlxappFactoryDelegate);
+            MimeObjectFactory.RegisterCore(MimeTypeMapper.XbapMime, htmlxappFactoryDelegate);
+ 
         }
 
         // This function returns the resource stream including resource and content file.
@@ -2040,7 +2032,7 @@ namespace System.Windows
                                 "Unknown packageUri passed: "+packageUri);
 
                 Invariant.Assert(IsApplicationObjectShuttingDown);
-                throw new InvalidOperationException(SR.Get(SRID.ApplicationShuttingDown));
+                throw new InvalidOperationException(SR.ApplicationShuttingDown);
             }
             return package;
         }
@@ -2398,7 +2390,7 @@ namespace System.Windows
         {
             if (_ownDispatcherStarted)
             {
-                throw new InvalidOperationException(SR.Get(SRID.ApplicationAlreadyRunning));
+                throw new InvalidOperationException(SR.ApplicationAlreadyRunning);
             }
             _ownDispatcherStarted = true;
             Dispatcher.Run();

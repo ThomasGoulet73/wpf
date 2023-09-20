@@ -330,10 +330,7 @@ namespace System.Windows.Xps.Packaging
         void
         WriteXML(XmlWriter writer)
         {
-            if (writer == null)
-            {
-                throw new ArgumentNullException("writer");
-            }
+            ArgumentNullException.ThrowIfNull(writer);
 
             writer.WriteStartElement(
              XpsS0Markup.SignatureDefinition,
@@ -348,7 +345,7 @@ namespace System.Windows.Xps.Packaging
             }
             else
             {
-                throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_SpotIDRequiredAttribute));
+                throw new XpsPackagingException(SR.ReachPackaging_SpotIDRequiredAttribute);
             }
 
             if (RequestedSigner != null)
@@ -414,11 +411,8 @@ namespace System.Windows.Xps.Packaging
         void
         ReadXML( XmlReader reader )
         {
-            if( reader == null )
-            {
-                throw new ArgumentNullException("reader");
-            }
-                
+            ArgumentNullException.ThrowIfNull(reader);
+
             //
             // Assume the calling function has already read the 
             // SignatureDefinition start element
@@ -427,7 +421,7 @@ namespace System.Windows.Xps.Packaging
                 reader.Name != XpsS0Markup.SignatureDefinition 
               )
             {
-                throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_NotSignatureDefinitionElement));
+                throw new XpsPackagingException(SR.ReachPackaging_NotSignatureDefinitionElement);
             }
 
             bool exitLoop = false;
@@ -510,7 +504,7 @@ namespace System.Windows.Xps.Packaging
             }
             else
             {
-                throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_NotValidSignatureDefinitionAttribute, attributeName));
+                throw new XpsPackagingException(SR.Format(SR.ReachPackaging_NotValidSignatureDefinitionAttribute, attributeName));
             }
         }
 
@@ -534,7 +528,7 @@ namespace System.Windows.Xps.Packaging
             }
             else
             {
-                throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_NotValidSignatureDefinitionAttribute, attributeName));
+                throw new XpsPackagingException(SR.Format(SR.ReachPackaging_NotValidSignatureDefinitionAttribute, attributeName));
             }
         }
 
@@ -570,7 +564,7 @@ namespace System.Windows.Xps.Packaging
             }
             else
             {
-                throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_NotValidSignatureDefinitionElement, reader.Name));
+                throw new XpsPackagingException(SR.Format(SR.ReachPackaging_NotValidSignatureDefinitionElement, reader.Name));
             }
         }
 

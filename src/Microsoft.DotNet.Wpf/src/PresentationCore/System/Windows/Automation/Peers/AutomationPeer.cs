@@ -23,7 +23,6 @@ using MS.Internal.PresentationCore;
 using MS.Win32;
 
 using SR=MS.Internal.PresentationCore.SR;
-using SRID=MS.Internal.PresentationCore.SRID;
 
 namespace System.Windows.Automation.Peers
 {
@@ -359,8 +358,7 @@ namespace System.Windows.Automation.Peers
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
         public void RaiseAsyncContentLoadedEvent(AsyncContentLoadedEventArgs args)
         {
-            if(args == null)
-                throw new ArgumentNullException("args");
+            ArgumentNullException.ThrowIfNull(args);
 
             if (EventMap.HasRegisteredEvent(AutomationEvents.AsyncContentLoaded))
             {
@@ -472,10 +470,9 @@ namespace System.Windows.Automation.Peers
         // walk up from the given connectedPeer up to find a root)
         internal AutomationPeer ValidateConnected(AutomationPeer connectedPeer)
         {
-            if(connectedPeer == null)
-                throw new ArgumentNullException("connectedPeer");
+            ArgumentNullException.ThrowIfNull(connectedPeer);
 
-            if(_parent != null && _hwnd != IntPtr.Zero) return this;
+            if (_parent != null && _hwnd != IntPtr.Zero) return this;
 
             if((connectedPeer._hwnd) != IntPtr.Zero)
             {
@@ -557,8 +554,7 @@ namespace System.Windows.Automation.Peers
         }
         private bool isDescendantOf(AutomationPeer parent)
         {
-            if(parent == null)
-                throw new ArgumentNullException("parent");
+            ArgumentNullException.ThrowIfNull(parent);
 
             List<AutomationPeer> children  = parent.GetChildren();
 
@@ -756,7 +752,7 @@ namespace System.Windows.Automation.Peers
         public Rect GetBoundingRectangle()
         {
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -774,7 +770,7 @@ namespace System.Windows.Automation.Peers
         public bool IsOffscreen()
         {
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -794,7 +790,7 @@ namespace System.Windows.Automation.Peers
             AutomationOrientation result;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -814,7 +810,7 @@ namespace System.Windows.Automation.Peers
             string result;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -834,7 +830,7 @@ namespace System.Windows.Automation.Peers
             string result;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -852,7 +848,7 @@ namespace System.Windows.Automation.Peers
         public string GetItemStatus()
         {
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -872,7 +868,7 @@ namespace System.Windows.Automation.Peers
             bool result;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -892,7 +888,7 @@ namespace System.Windows.Automation.Peers
             bool result;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -911,7 +907,7 @@ namespace System.Windows.Automation.Peers
         {
             bool result;
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -929,7 +925,7 @@ namespace System.Windows.Automation.Peers
         public bool IsEnabled()
         {
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -949,7 +945,7 @@ namespace System.Windows.Automation.Peers
             bool result;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -969,7 +965,7 @@ namespace System.Windows.Automation.Peers
             string result;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -987,7 +983,7 @@ namespace System.Windows.Automation.Peers
         public string GetName()
         {
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1007,7 +1003,7 @@ namespace System.Windows.Automation.Peers
             AutomationControlType result;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1027,7 +1023,7 @@ namespace System.Windows.Automation.Peers
             string result;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1047,7 +1043,7 @@ namespace System.Windows.Automation.Peers
             bool result;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1071,7 +1067,7 @@ namespace System.Windows.Automation.Peers
             bool result;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1096,7 +1092,7 @@ namespace System.Windows.Automation.Peers
             AutomationPeer result;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1116,7 +1112,7 @@ namespace System.Windows.Automation.Peers
             string result;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1136,7 +1132,7 @@ namespace System.Windows.Automation.Peers
             string result;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1156,7 +1152,7 @@ namespace System.Windows.Automation.Peers
             string result;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1176,7 +1172,7 @@ namespace System.Windows.Automation.Peers
             Point result;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1201,7 +1197,7 @@ namespace System.Windows.Automation.Peers
         public void SetFocus()
         {
             if (_publicSetFocusInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1219,7 +1215,7 @@ namespace System.Windows.Automation.Peers
         {
             AutomationLiveSetting result = AutomationLiveSetting.Off;
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1243,7 +1239,7 @@ namespace System.Windows.Automation.Peers
         {
             List<AutomationPeer> result = null;
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1295,7 +1291,7 @@ namespace System.Windows.Automation.Peers
             int result = AutomationProperties.AutomationSizeOfSetDefault;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1323,7 +1319,7 @@ namespace System.Windows.Automation.Peers
             AutomationHeadingLevel result = AutomationHeadingLevel.None;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1393,7 +1389,7 @@ namespace System.Windows.Automation.Peers
         {
             bool result = false;
             if(_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1421,7 +1417,7 @@ namespace System.Windows.Automation.Peers
             int result = AutomationProperties.AutomationPositionInSetDefault;
 
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {
@@ -1445,7 +1441,7 @@ namespace System.Windows.Automation.Peers
         public List<AutomationPeer> GetChildren()
         {
             if (_publicCallInProgress)
-                throw new InvalidOperationException(SR.Get(SRID.Automation_RecursivePublicCall));
+                throw new InvalidOperationException(SR.Automation_RecursivePublicCall);
 
             try
             {

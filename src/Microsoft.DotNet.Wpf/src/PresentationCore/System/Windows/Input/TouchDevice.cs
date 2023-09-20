@@ -20,7 +20,6 @@ using MS.Internal.KnownBoxes;
 using MS.Internal.PresentationCore;
 using MS.Utility;
 using SR = MS.Internal.PresentationCore.SR;
-using SRID = MS.Internal.PresentationCore.SRID;
 using System.Windows.Input.Tracing;
 
 namespace System.Windows.Input
@@ -263,7 +262,7 @@ namespace System.Windows.Input
 
         private static void EnsureValid(ref IInputElement element)
         {
-            // We understand UIElements and ContentElements.
+            // We understand UIElements, ContentElements and UIElement3Ds.
             // If we are over something else (like a raw visual) find the containing element.
             if ((element != null) && !InputElement.IsValid(element))
             {
@@ -342,7 +341,7 @@ namespace System.Windows.Input
 
             if ((element != null) && (uiElement == null) && (contentElement == null) && (uiElement3D == null))
             {
-                throw new ArgumentException(SR.Get(SRID.Invalid_IInputElement, element.GetType()), "element");
+                throw new ArgumentException(SR.Format(SR.Invalid_IInputElement, element.GetType()), "element");
             }
 
             if (_captured != element)
@@ -705,7 +704,7 @@ namespace System.Windows.Input
         {
             if (_isActive)
             {
-                throw new InvalidOperationException(SR.Get(SRID.Touch_DeviceAlreadyActivated));
+                throw new InvalidOperationException(SR.Touch_DeviceAlreadyActivated);
             }
 
             PromotingToManipulation = false;
@@ -730,7 +729,7 @@ namespace System.Windows.Input
         {
             if (!_isActive)
             {
-                throw new InvalidOperationException(SR.Get(SRID.Touch_DeviceNotActivated));
+                throw new InvalidOperationException(SR.Touch_DeviceNotActivated);
             }
 
             Capture(null);

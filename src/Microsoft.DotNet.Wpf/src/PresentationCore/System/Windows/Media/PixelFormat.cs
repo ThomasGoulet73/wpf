@@ -21,7 +21,6 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 
 using SR=MS.Internal.PresentationCore.SR;
-using SRID=MS.Internal.PresentationCore.SRID;
 using UnsafeNativeMethods=MS.Win32.PresentationCore.UnsafeNativeMethods;
 
 namespace System.Windows.Media
@@ -219,10 +218,7 @@ namespace System.Windows.Media
         {
             PixelFormatEnum format = PixelFormatEnum.Default;
 
-            if (pixelFormatString == null)
-            {
-                throw new System.ArgumentNullException("pixelFormatString");
-            }
+            ArgumentNullException.ThrowIfNull(pixelFormatString);
 
             string upperPixelFormatString = pixelFormatString.ToUpper(System.Globalization.CultureInfo.InvariantCulture);
 
@@ -337,7 +333,7 @@ namespace System.Windows.Media
                     break;
 
                 default:
-                    throw new System.ArgumentException (SR.Get(SRID.Image_BadPixelFormat, pixelFormatString),
+                    throw new System.ArgumentException (SR.Format(SR.Image_BadPixelFormat, pixelFormatString),
                             "pixelFormatString");
             }
 
@@ -431,7 +427,7 @@ namespace System.Windows.Media
                     return WICPixelFormatGUIDs.WICPixelFormat32bppCMYK;
             }
 
-            throw new System.ArgumentException (SR.Get(SRID.Image_BadPixelFormat, format), "format");
+            throw new System.ArgumentException (SR.Format(SR.Image_BadPixelFormat, format), "format");
         }
 
         private PixelFormatFlags FormatFlags
@@ -585,7 +581,7 @@ namespace System.Windows.Media
                     if (hr == (int)WinCodecErrors.WINCODEC_ERR_COMPONENTINITIALIZEFAILURE ||
                         hr == (int)WinCodecErrors.WINCODEC_ERR_COMPONENTNOTFOUND)
                     {
-                        throw new System.NotSupportedException(SR.Get(SRID.Image_NoPixelFormatFound));
+                        throw new System.NotSupportedException(SR.Image_NoPixelFormatFound);
                     }
                     HRESULT.Check(hr);
 

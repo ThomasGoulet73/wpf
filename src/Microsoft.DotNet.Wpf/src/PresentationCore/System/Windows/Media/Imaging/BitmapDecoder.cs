@@ -30,7 +30,6 @@ using System.Windows.Threading;
 using System.Windows.Media.Imaging;
 using MS.Internal.PresentationCore;                        // SecurityHelper
 using SR=MS.Internal.PresentationCore.SR;
-using SRID=MS.Internal.PresentationCore.SRID;
 using System.Net;
 using System.Net.Cache;
 using System.Text;
@@ -79,10 +78,7 @@ namespace System.Windows.Media.Imaging
             Guid clsId = Guid.Empty;
             bool isOriginalWritable = false;
 
-            if (bitmapUri == null)
-            {
-                throw new ArgumentNullException("bitmapUri");
-            }
+            ArgumentNullException.ThrowIfNull(bitmapUri);
 
             if ((createOptions & BitmapCreateOptions.IgnoreImageCache) != 0)
             {
@@ -115,7 +111,7 @@ namespace System.Windows.Media.Imaging
 
             if (clsId != expectedClsId)
             {
-                throw new FileFormatException(bitmapUri, SR.Get(SRID.Image_CantDealWithUri));
+                throw new FileFormatException(bitmapUri, SR.Image_CantDealWithUri);
             }
 
             _uri = bitmapUri;
@@ -139,10 +135,7 @@ namespace System.Windows.Media.Imaging
             Guid clsId = Guid.Empty;
             bool isOriginalWritable = false;
 
-            if (bitmapStream == null)
-            {
-                throw new ArgumentNullException("bitmapStream");
-            }
+            ArgumentNullException.ThrowIfNull(bitmapStream);
 
             _decoderHandle = SetupDecoderFromUriOrStream(
                 null,
@@ -162,7 +155,7 @@ namespace System.Windows.Media.Imaging
 
             if (clsId != Guid.Empty && clsId != expectedClsId)
             {
-                throw new FileFormatException(null, SR.Get(SRID.Image_CantDealWithStream));
+                throw new FileFormatException(null, SR.Image_CantDealWithStream);
             }
 
             _stream = bitmapStream;
@@ -489,10 +482,7 @@ namespace System.Windows.Media.Imaging
             RequestCachePolicy uriCachePolicy
             )
         {
-            if (bitmapUri == null)
-            {
-                throw new ArgumentNullException("bitmapUri");
-            }
+            ArgumentNullException.ThrowIfNull(bitmapUri);
 
             return CreateFromUriOrStream(
                 null,
@@ -518,10 +508,7 @@ namespace System.Windows.Media.Imaging
             BitmapCacheOption cacheOption
             )
         {
-            if (bitmapStream == null)
-            {
-                throw new ArgumentNullException("bitmapStream");
-            }
+            ArgumentNullException.ThrowIfNull(bitmapStream);
 
             return CreateFromUriOrStream(
                 null,
@@ -1013,7 +1000,7 @@ namespace System.Windows.Media.Imaging
         {
             if (!_isOriginalWritable)
             {
-                throw new System.InvalidOperationException(SR.Get(SRID.Image_OriginalStreamReadOnly));
+                throw new System.InvalidOperationException(SR.Image_OriginalStreamReadOnly);
             }
         }
 
@@ -1053,7 +1040,7 @@ namespace System.Windows.Media.Imaging
                 if (uri.IsAbsoluteUri)
                 {
                     // This code path executes only for pack web requests
-                    if (String.Compare(uri.Scheme, PackUriHelper.UriSchemePack, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Equals(uri.Scheme, PackUriHelper.UriSchemePack, StringComparison.OrdinalIgnoreCase))
                     {
                         WebResponse response = WpfWebRequestHelper.CreateRequestAndGetResponse(uri);
                         bitmapStream = response.GetResponseStream();
@@ -1138,14 +1125,22 @@ namespace System.Windows.Media.Imaging
             if (stream is System.IO.FileStream)
             {
                 System.IO.FileStream filestream = stream as System.IO.FileStream;
-
                 try
                 {
-                    safeFilehandle = filestream.SafeFileHandle;
+                    if (filestream.IsAsync is false)
+                    {
+                        safeFilehandle = filestream.SafeFileHandle;
+                    }
+                    else
+                    {
+                        // The IWICImagingFactory_CreateDecoderFromFileHandle_Proxy do not support async Filestream, so we revert to old code path.
+                        safeFilehandle = null;
+                    }
                 }
                 catch
                 {
                     // If Filestream doesn't support SafeHandle then revert to old code path.
+                    // See https://github.com/dotnet/wpf/issues/4355
                     safeFilehandle = null;
                 }
             }
@@ -1555,7 +1550,7 @@ namespace System.Windows.Media.Imaging
                 if (comStream == IntPtr.Zero)
                 {
                     throw new System.InvalidOperationException(
-                        SR.Get(SRID.Image_CantDealWithStream));
+                        SR.Image_CantDealWithStream);
                 }
 
                 // If the stream is not seekable, we must create a
@@ -1574,7 +1569,7 @@ namespace System.Windows.Media.Imaging
                     else if (!seekable)
                     {
                         throw new System.InvalidOperationException(
-                                SR.Get(SRID.Image_CantDealWithStream));
+                                SR.Image_CantDealWithStream);
                     }
                 }
 }
@@ -1582,7 +1577,7 @@ namespace System.Windows.Media.Imaging
             if (comStream == IntPtr.Zero)
             {
                 throw new System.InvalidOperationException(
-                SR.Get(SRID.Image_CantDealWithStream));
+                SR.Image_CantDealWithStream);
             }
 
             return comStream;

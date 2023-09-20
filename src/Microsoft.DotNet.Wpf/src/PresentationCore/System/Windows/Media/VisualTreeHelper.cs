@@ -18,7 +18,6 @@ using MS.Internal.Media;
 using MS.Internal.PresentationCore;
 
 using SR=MS.Internal.PresentationCore.SR;
-using SRID=MS.Internal.PresentationCore.SRID;
 
 namespace System.Windows.Media
 {
@@ -37,10 +36,7 @@ namespace System.Windows.Media
     {
         private static void CheckVisualReferenceArgument(DependencyObject reference)
         {
-            if (reference == null)
-            {
-                throw new ArgumentNullException("reference");
-            }
+            ArgumentNullException.ThrowIfNull(reference);
         }
 
         /// <summary>
@@ -236,14 +232,8 @@ namespace System.Windows.Media
         // of the given type
         internal static bool IsAncestorOf(DependencyObject ancestor, DependencyObject descendant, Type stopType)
         {
-            if (ancestor == null)
-            {
-                throw new ArgumentNullException("ancestor");
-            }
-            if (descendant == null)
-            {
-                throw new ArgumentNullException("descendant");
-            }
+            ArgumentNullException.ThrowIfNull(ancestor);
+            ArgumentNullException.ThrowIfNull(descendant);
 
             VisualTreeUtils.EnsureVisual(ancestor);
             VisualTreeUtils.EnsureVisual(descendant);
@@ -254,14 +244,11 @@ namespace System.Windows.Media
 
             while ((current != null) && (current != ancestor) && !stopType.IsInstanceOfType(current))
             {
-                Visual visual;
-                Visual3D visual3D;
-
-                if ((visual = current as Visual) != null)
+                if (current is Visual visual)
                 {
                     current = visual.InternalVisualParent;
                 }
-                else if ((visual3D = current as Visual3D) != null)
+                else if (current is Visual3D visual3D)
                 {
                     current = visual3D.InternalVisualParent;
                 }

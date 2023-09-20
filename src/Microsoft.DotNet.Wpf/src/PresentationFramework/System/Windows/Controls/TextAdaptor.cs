@@ -497,7 +497,7 @@ namespace MS.Internal.Automation
             ITextRange selection = _textContainer.TextSelection;
             if (selection == null)
             {
-                throw new InvalidOperationException(SR.Get(SRID.TextProvider_TextSelectionNotSupported));
+                throw new InvalidOperationException(SR.TextProvider_TextSelectionNotSupported);
             }
             return new ITextRangeProvider[] { new TextRangeAdaptor(this, selection.Start, selection.End, _textPeer) };
         }
@@ -573,10 +573,7 @@ namespace MS.Internal.Automation
         /// <returns>A range that spans the child element.</returns>
         ITextRangeProvider ITextProvider.RangeFromChild(IRawElementProviderSimple childElementProvider)
         {
-            if (childElementProvider == null)
-            {
-                throw new ArgumentNullException("childElementProvider");
-            }
+            ArgumentNullException.ThrowIfNull(childElementProvider);
 
             // Retrieve DependencyObject from AutomationElement
             DependencyObject childElement;
@@ -651,7 +648,7 @@ namespace MS.Internal.Automation
             }
             if (range == null)
             {
-                throw new InvalidOperationException(SR.Get(SRID.TextProvider_InvalidChildElement));
+                throw new InvalidOperationException(SR.TextProvider_InvalidChildElement);
             }
             return range;
         }
@@ -680,7 +677,7 @@ namespace MS.Internal.Automation
             }
             if (range == null)
             {
-                throw new ArgumentException(SR.Get(SRID.TextProvider_InvalidPoint));
+                throw new ArgumentException(SR.TextProvider_InvalidPoint);
             }
             return range;
         }

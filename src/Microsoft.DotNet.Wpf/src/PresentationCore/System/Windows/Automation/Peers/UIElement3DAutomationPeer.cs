@@ -12,7 +12,6 @@ using System.Collections.Generic;
 
 using MS.Internal;
 using SR=MS.Internal.PresentationCore.SR;
-using SRID=MS.Internal.PresentationCore.SRID;
 using System.Windows.Automation;
 using System.Windows.Automation.Provider;
 using MS.Internal.Automation;
@@ -25,11 +24,8 @@ namespace System.Windows.Automation.Peers
         ///
         public UIElement3DAutomationPeer(UIElement3D owner)
         {
-            if(owner == null)
-            {
-                throw new ArgumentNullException("owner");
-            }
-            
+            ArgumentNullException.ThrowIfNull(owner);
+
             _owner = owner;
         }
 
@@ -55,21 +51,15 @@ namespace System.Windows.Automation.Peers
         ///</summary>
         public static AutomationPeer CreatePeerForElement(UIElement3D element)
         {
-            if(element == null)
-            {
-                throw new ArgumentNullException("element");
-            }
-            
+            ArgumentNullException.ThrowIfNull(element);
+
             return element.CreateAutomationPeer();
         }
 
         ///
         public static AutomationPeer FromElement(UIElement3D element)
         {
-            if(element == null)
-            {
-                throw new ArgumentNullException("element");
-            }
+            ArgumentNullException.ThrowIfNull(element);
 
             return element.GetAutomationPeer();
         }
@@ -425,7 +415,7 @@ namespace System.Windows.Automation.Peers
         override protected void SetFocusCore() 
         { 
             if (!_owner.Focus())
-                throw new InvalidOperationException(SR.Get(SRID.SetFocusFailed));
+                throw new InvalidOperationException(SR.SetFocusFailed);
         }
 
         ///

@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-﻿using MS.Internal;
+using MS.Internal;
 using MS.Internal.PrintWin32Thunk;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,10 +30,7 @@ namespace System.Windows.Xps.Packaging
             IXpsDocumentPackageTarget packageTarget
             )
         {
-            if (packageTarget == null)
-            {
-                throw new ArgumentNullException(nameof(packageTarget));
-            }
+            ArgumentNullException.ThrowIfNull(packageTarget);
             try
             {
                 _xpsManager = new XpsManager();
@@ -102,7 +99,7 @@ namespace System.Windows.Xps.Packaging
             }
             else
             {
-                throw new XpsSerializationException(SR.Get(SRID.ReachSerialization_CannotReleaseXmlWriter));
+                throw new XpsSerializationException(SR.ReachSerialization_CannotReleaseXmlWriter);
             }
         }
 
@@ -303,7 +300,7 @@ namespace System.Windows.Xps.Packaging
             }
             else
             {
-                throw new XpsSerializationException(SR.Get(SRID.ReachSerialization_CannotReleaseXmlWriter));
+                throw new XpsSerializationException(SR.ReachSerialization_CannotReleaseXmlWriter);
             }
         }
 
@@ -400,29 +397,23 @@ namespace System.Windows.Xps.Packaging
             PrintTicket printTicket
             )
         {
-            if (printTicket == null)
+            ArgumentNullException.ThrowIfNull(printTicket);
+
+            // We need to figure out at which level of the package
+            // is this printTicket targeted, if the document ref 
+            // count is 0, that means we're about to start a new 
+            // document, otherwise we assume it is a page print ticket
+            // We don't support setting FixedDocumentSequence print ticket via serialization,
+            // since it can only be set when starting the print job
+            if (_currentFixedDocumentSequenceWriter != null)
             {
-                throw new ArgumentNullException(nameof(printTicket));
-            }
-            else
-            {
-                //
-                // We need to figure out at which level of the package
-                // is this printTicket targeted, if the document ref 
-                // count is 0, that means we're about to start a new 
-                // document, otherwise we assume it is a page print ticket
-                // We don't support setting FixedDocumentSequence print ticket via serialization,
-                // since it can only be set when starting the print job
-                if (_currentFixedDocumentSequenceWriter != null)
+                if (_currentFixedDocumentWriterRef == 0)
                 {
-                    if (_currentFixedDocumentWriterRef == 0)
-                    {
-                        _currentDocumentPrintTicket = printTicket;
-                    }
-                    else
-                    {
-                        _currentPagePrintTicket = printTicket;
-                    }
+                    _currentDocumentPrintTicket = printTicket;
+                }
+                else
+                {
+                    _currentPagePrintTicket = printTicket;
                 }
             }
         }
@@ -488,7 +479,7 @@ namespace System.Windows.Xps.Packaging
                 }
                 else
                 {
-                    throw new XpsSerializationException(SR.Get(SRID.ReachSerialization_NoFixedPageWriter));
+                    throw new XpsSerializationException(SR.ReachSerialization_NoFixedPageWriter);
                 }
             }
             else
@@ -532,7 +523,7 @@ namespace System.Windows.Xps.Packaging
             }
             else
             {
-                throw new XpsSerializationException(SR.Get(SRID.ReachSerialization_CannotReleaseXmlWriter));
+                throw new XpsSerializationException(SR.ReachSerialization_CannotReleaseXmlWriter);
             }
         }
 
@@ -545,16 +536,13 @@ namespace System.Windows.Xps.Packaging
         {
             XpsResourceStream resourceStream = null;
 
-            if (resourceId == null)
-            {
-                throw new ArgumentNullException(nameof(resourceId));
-            }
+            ArgumentNullException.ThrowIfNull(resourceId);
 
             ContentType contentType = new ContentType(resourceId);
 
             if (ContentType.Empty.AreTypeAndSubTypeEqual(contentType))
             {
-                throw new ArgumentException(SR.Get(SRID.ReachPackaging_InvalidContentType,contentType.ToString()));
+                throw new ArgumentException(SR.Format(SR.ReachPackaging_InvalidContentType, contentType.ToString()));
             }
 
             if (_currentXpsImageRef == 0)
@@ -826,10 +814,7 @@ namespace System.Windows.Xps.Packaging
             ContentType contentType
             )
         {
-            if (contentType == null)
-            {
-                throw new ArgumentNullException(nameof(contentType));
-            }
+            ArgumentNullException.ThrowIfNull(contentType);
 
             if (contentType.AreTypeAndSubTypeEqual(XpsS0Markup.JpgContentType))
             {
@@ -849,7 +834,7 @@ namespace System.Windows.Xps.Packaging
             }
             else
             {
-                throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_UnsupportedImageType));
+                throw new XpsPackagingException(SR.ReachPackaging_UnsupportedImageType);
             }
         }
 

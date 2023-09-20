@@ -162,10 +162,7 @@ namespace System.Windows.Controls
         /// <param name="stream">The stream that contains the content of a html document</param>
         public void NavigateToStream(Stream stream)
         {
-            if (stream == null)
-            {
-                throw new ArgumentNullException("stream");
-            }
+            ArgumentNullException.ThrowIfNull(stream);
 
             DocumentStream = stream;            
             // We navigate to "about:blank" when Source is set to null. 
@@ -346,7 +343,7 @@ namespace System.Windows.Controls
             }
             else
             {
-                throw new InvalidOperationException(SR.Get(SRID.CannotInvokeScript));
+                throw new InvalidOperationException(SR.CannotInvokeScript);
             }
             return retVal;
         }
@@ -441,7 +438,7 @@ namespace System.Windows.Controls
 
                     if (!System.Runtime.InteropServices.MarshalLocal.IsTypeVisibleFromCom(t))
                     {
-                        throw new ArgumentException(SR.Get(SRID.NeedToBeComVisible));
+                        throw new ArgumentException(SR.NeedToBeComVisible);
                     }
                 }
 
@@ -670,7 +667,7 @@ namespace System.Windows.Controls
                 // We still don't have _axIWebBrowser2. Throw an exception.
                 if (_axIWebBrowser2 == null)
                 {
-                    throw new InvalidOperationException(SR.Get(SRID.WebBrowserNoCastToIWebBrowser2));
+                    throw new InvalidOperationException(SR.WebBrowserNoCastToIWebBrowser2);
                 }
                 return _axIWebBrowser2;
             }
@@ -756,7 +753,7 @@ namespace System.Windows.Controls
             
             if (pSource != null && pSource.RootVisual is PopupRoot)
             {
-                throw new InvalidOperationException(SR.Get(SRID.CannotBeInsidePopup));
+                throw new InvalidOperationException(SR.CannotBeInsidePopup);
             }
         }
 
@@ -887,7 +884,7 @@ namespace System.Windows.Controls
 
             if (!source.IsAbsoluteUri)
             {
-                throw new ArgumentException(SR.Get(SRID.AbsoluteUriOnly), "source");
+                throw new ArgumentException(SR.AbsoluteUriOnly, "source");
             }
 
             // Resolve Pack://siteoforigin.

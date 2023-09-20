@@ -20,7 +20,6 @@ using System.Windows;
 using System.Windows.Markup;
 
 using SR=MS.Internal.PresentationCore.SR;
-using SRID=MS.Internal.PresentationCore.SRID;
 
 namespace System.Windows.Media.Animation
 {
@@ -221,7 +220,7 @@ namespace System.Windows.Media.Animation
 
             if (newValue < 0 || newValue > 1 || double.IsNaN(newValue))
             {
-                throw new ArgumentException(SR.Get(SRID.Timing_InvalidArgAccelAndDecel), "value");
+                throw new ArgumentException(SR.Timing_InvalidArgAccelAndDecel, "value");
             }
 
             return true;
@@ -385,7 +384,7 @@ namespace System.Windows.Media.Animation
         /// <seealso cref="Timeline.DesiredFrameRateProperty" />
         public static Int32? GetDesiredFrameRate(Timeline timeline)
         {
-            if (timeline == null) { throw new ArgumentNullException("timeline"); }
+            ArgumentNullException.ThrowIfNull(timeline);
 
             return (Int32?)timeline.GetValue(DesiredFrameRateProperty);
         }
@@ -398,7 +397,7 @@ namespace System.Windows.Media.Animation
         /// <seealso cref="Timeline.DesiredFrameRateProperty" />
         public static void SetDesiredFrameRate(Timeline timeline, Int32? desiredFrameRate)
         {
-            if (timeline == null) { throw new ArgumentNullException("timeline"); }
+            ArgumentNullException.ThrowIfNull(timeline);
 
             timeline.SetValue(DesiredFrameRateProperty, desiredFrameRate);
         }
@@ -610,7 +609,7 @@ namespace System.Windows.Media.Animation
 
             if (newValue <= 0 || newValue > double.MaxValue || double.IsNaN(newValue))
             {
-                throw new ArgumentException(SR.Get(SRID.Timing_InvalidArgFinitePositive), "value");
+                throw new ArgumentException(SR.Timing_InvalidArgFinitePositive, "value");
             }
 
             return true;
@@ -729,7 +728,7 @@ namespace System.Windows.Media.Animation
         {
             if (AccelerationRatio + DecelerationRatio > 1)
             {
-                throw new InvalidOperationException(SR.Get(SRID.Timing_AccelAndDecelGreaterThanOne));
+                throw new InvalidOperationException(SR.Timing_AccelAndDecelGreaterThanOne);
             }
         }
 
@@ -1088,7 +1087,7 @@ namespace System.Windows.Media.Animation
             {
                 builder.Append(", Name=\"");
                 builder.Append(Name);
-                builder.Append("\"");
+                builder.Append('"');
             }
             if (AccelerationRatio != 0.0f)
             {

@@ -40,10 +40,7 @@ namespace MS.Internal.Controls
 
         internal ActiveXSite(ActiveXHost host)
         {
-            if (host == null)
-            {
-                throw new ArgumentNullException("host");
-            }
+            ArgumentNullException.ThrowIfNull(host);
             _host = host;
         }
 
@@ -191,7 +188,7 @@ namespace MS.Internal.Controls
                 }
                 else if (this.Host.ActiveXInPlaceObject is UnsafeNativeMethods.IOleInPlaceObjectWindowless)
                 {
-                    throw new InvalidOperationException(SR.Get(SRID.AxWindowlessControl));
+                    throw new InvalidOperationException(SR.AxWindowlessControl);
                 }
             }
             return NativeMethods.S_OK;

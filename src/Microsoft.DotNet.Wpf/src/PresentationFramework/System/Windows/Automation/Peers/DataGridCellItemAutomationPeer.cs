@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
@@ -29,15 +29,8 @@ namespace System.Windows.Automation.Peers
         /// </summary>
         public DataGridCellItemAutomationPeer(object item, DataGridColumn dataGridColumn) : base()
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException("item");
-            }
-
-            if (dataGridColumn == null)
-            {
-                throw new ArgumentNullException("dataGridColumn");
-            }
+            ArgumentNullException.ThrowIfNull(item);
+            ArgumentNullException.ThrowIfNull(dataGridColumn);
 
             _item = new WeakReference(item);
             _column = dataGridColumn;
@@ -201,7 +194,7 @@ namespace System.Windows.Automation.Peers
         {
             if (!AccessibilitySwitches.UseNetFx47CompatibleAccessibilityFeatures)
             {
-                return SR.Get(SRID.DataGridCellItemAutomationPeer_LocalizedControlType);
+                return SR.DataGridCellItemAutomationPeer_LocalizedControlType;
             }
             else
             {
@@ -237,7 +230,7 @@ namespace System.Windows.Automation.Peers
 
             if (string.IsNullOrEmpty(name))
             {
-                name = SR.Get(SRID.DataGridCellItemAutomationPeer_NameCoreFormat, Item, _column.DisplayIndex);
+                name = SR.Format(SR.DataGridCellItemAutomationPeer_NameCoreFormat, Item, _column.DisplayIndex);
             }
 
             return name;
@@ -664,7 +657,7 @@ namespace System.Windows.Automation.Peers
             // BeginEdit on a NewItemPlaceholder row returns false.
             if (!success  && !IsNewItemPlaceholder)
             {
-                throw new InvalidOperationException(SR.Get(SRID.DataGrid_AutomationInvokeFailed));
+                throw new InvalidOperationException(SR.DataGrid_AutomationInvokeFailed);
             }
         }
 
@@ -701,7 +694,7 @@ namespace System.Windows.Automation.Peers
         {
             if (!IsCellSelectionUnit)
             {
-                throw new InvalidOperationException(SR.Get(SRID.DataGrid_CannotSelectCell));
+                throw new InvalidOperationException(SR.DataGrid_CannotSelectCell);
             }
 
             // If item is already selected - do nothing
@@ -726,7 +719,7 @@ namespace System.Windows.Automation.Peers
         {
             if (!IsCellSelectionUnit)
             {
-                throw new InvalidOperationException(SR.Get(SRID.DataGrid_CannotSelectCell));
+                throw new InvalidOperationException(SR.DataGrid_CannotSelectCell);
             }
 
             EnsureEnabled();
@@ -742,7 +735,7 @@ namespace System.Windows.Automation.Peers
         {
             if (!IsCellSelectionUnit)
             {
-                throw new InvalidOperationException(SR.Get(SRID.DataGrid_CannotSelectCell));
+                throw new InvalidOperationException(SR.DataGrid_CannotSelectCell);
             }
 
             EnsureEnabled();
@@ -767,7 +760,7 @@ namespace System.Windows.Automation.Peers
         {
             if (_column.IsReadOnly)
             {
-                throw new InvalidOperationException(SR.Get(SRID.DataGrid_ColumnIsReadOnly));
+                throw new InvalidOperationException(SR.DataGrid_ColumnIsReadOnly);
             }
             if (this.OwningDataGrid != null)
             {
@@ -816,7 +809,7 @@ namespace System.Windows.Automation.Peers
             // To avoid the situation on legacy systems which may not have new unmanaged core. this check with old unmanaged core
             // avoids throwing exception and provide older behavior returning default values for items which are virtualized rather than throwing exception.
             if (VirtualizedItemPatternIdentifiers.Pattern != null && !IsItemInAutomationTree())
-                throw new ElementNotAvailableException(SR.Get(SRID.VirtualizedElement));
+                throw new ElementNotAvailableException(SR.VirtualizedElement);
         }
 
         private bool IsItemInAutomationTree()

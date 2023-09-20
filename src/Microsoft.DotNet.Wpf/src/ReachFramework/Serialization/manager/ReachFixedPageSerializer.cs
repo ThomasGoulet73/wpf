@@ -147,12 +147,9 @@ namespace System.Windows.Xps.Serialization
         {
             Toolbox.EmitEvent(EventTrace.Event.WClientDRXSerializationBegin);
 
-            if(serializableObjectContext == null)
-            {
-                throw new ArgumentNullException("serializableObjectContext");
-            }
+            ArgumentNullException.ThrowIfNull(serializableObjectContext);
 
-            if( SerializationManager is IXpsSerializationManager)
+            if ( SerializationManager is IXpsSerializationManager)
             {
                 (SerializationManager as IXpsSerializationManager).RegisterPageStart();
             }
@@ -218,7 +215,7 @@ namespace System.Windows.Xps.Serialization
                 }
                 else
                 {
-                    throw new XpsSerializationException(SR.Get(SRID.ReachSerialization_WrongPropertyTypeForFixedPage));
+                    throw new XpsSerializationException(SR.ReachSerialization_WrongPropertyTypeForFixedPage);
                 }
 
                 if(needEndVisual)
@@ -300,10 +297,7 @@ namespace System.Windows.Xps.Serialization
             SerializablePropertyContext serializablePropertyContext
             )
         {
-            if(serializablePropertyContext == null)
-            {
-                throw new ArgumentNullException("serializablePropertyContext");
-            }
+            ArgumentNullException.ThrowIfNull(serializablePropertyContext);
 
             String attributeValue = String.Empty;
 
@@ -332,10 +326,7 @@ namespace System.Windows.Xps.Serialization
             SerializablePropertyContext serializablePropertyContext
             )
         {
-            if(serializablePropertyContext == null)
-            {
-                throw new ArgumentNullException("serializablePropertyContext");
-            }
+            ArgumentNullException.ThrowIfNull(serializablePropertyContext);
 
             String valueAsString                  = null;
             Object targetObjectContainingProperty = serializablePropertyContext.TargetObject;
@@ -350,7 +341,7 @@ namespace System.Windows.Xps.Serialization
                                                                        propertyValue);
 
 
-                if (typeof(Type).IsInstanceOfType(propertyValue))
+                if (propertyValue is Type)
                 {
                     int index = valueAsString.LastIndexOf('.');
                     valueAsString = string.Concat(
@@ -416,7 +407,7 @@ namespace System.Windows.Xps.Serialization
             }
             else
             {
-                throw new XpsSerializationException(SR.Get(SRID.ReachSerialization_NoSerializer));
+                throw new XpsSerializationException(SR.ReachSerialization_NoSerializer);
             }
 
             return needEndVisual;

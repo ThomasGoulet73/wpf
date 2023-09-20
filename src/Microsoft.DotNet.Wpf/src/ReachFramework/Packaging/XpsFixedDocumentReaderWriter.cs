@@ -67,8 +67,8 @@ namespace System.Windows.Xps.Packaging
         /// Gets the PrintTicket associated with this fixed document.
         /// </summary>
         /// <value>Value can be a PrintTicket or null.</value>
-        /// <exception cref="SRID.ReachPackaging_PrintTicketAlreadyCommitted">PrintTicket has already been committed.</exception>
-        /// <exception cref="SRID.ReachPackaging_NotAPrintTicket">Property is not a valid PrintTicket instance.</exception>
+        /// <exception cref="SR.ReachPackaging_PrintTicketAlreadyCommitted">PrintTicket has already been committed.</exception>
+        /// <exception cref="SR.ReachPackaging_NotAPrintTicket">Property is not a valid PrintTicket instance.</exception>
         PrintTicket PrintTicket { get; }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace System.Windows.Xps.Packaging
         /// Returns an interface to the newly created fixed page.
         /// </returns>
         /// <exception cref="ObjectDisposedException">The FixedDocument has already been disposed</exception>
-        /// <exception cref="SRID.ReachPackaging_PanelOrSequenceAlreadyOpen">FixedPage is not completed.</exception>
+        /// <exception cref="SR.ReachPackaging_PanelOrSequenceAlreadyOpen">FixedPage is not completed.</exception>
         IXpsFixedPageWriter
         AddFixedPage(
             );
@@ -206,8 +206,8 @@ namespace System.Windows.Xps.Packaging
         /// committed to the package.  The commit happens when a valid PrintTicket
         /// is set and a subsequent flush on the document occurs.
         /// </value>
-        /// <exception cref="SRID.ReachPackaging_PrintTicketAlreadyCommitted">PrintTicket has already been committed.</exception>
-        /// <exception cref="SRID.ReachPackaging_NotAPrintTicket">Property is not a valid PrintTicket instance.</exception>
+        /// <exception cref="SR.ReachPackaging_PrintTicketAlreadyCommitted">PrintTicket has already been committed.</exception>
+        /// <exception cref="SR.ReachPackaging_NotAPrintTicket">Property is not a valid PrintTicket instance.</exception>
         PrintTicket PrintTicket { set; }
 
         /// <summary>
@@ -265,10 +265,7 @@ namespace System.Windows.Xps.Packaging
             )
             : base(xpsManager)
         {
-            if (null == part)
-            {
-                throw new ArgumentNullException("part");
-            }
+            ArgumentNullException.ThrowIfNull(part);
 
             this.Uri = part.Uri;
 
@@ -299,8 +296,8 @@ namespace System.Windows.Xps.Packaging
         /// is set and a subsequent flush on the document occurs.
         /// </summary>
         /// <value>Value can be a PrintTicket or null.</value>
-        /// <exception cref="SRID.ReachPackaging_PrintTicketAlreadyCommitted">PrintTicket has already been committed.</exception>
-        /// <exception cref="SRID.ReachPackaging_NotAPrintTicket">Property is not a valid PrintTicket instance.</exception>
+        /// <exception cref="SR.ReachPackaging_PrintTicketAlreadyCommitted">PrintTicket has already been committed.</exception>
+        /// <exception cref="SR.ReachPackaging_NotAPrintTicket">Property is not a valid PrintTicket instance.</exception>
         public PrintTicket PrintTicket
         {
             get
@@ -317,11 +314,11 @@ namespace System.Windows.Xps.Packaging
                 {
                     if (_isPrintTicketCommitted)
                     {
-                        throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_PrintTicketAlreadyCommitted));
+                        throw new XpsPackagingException(SR.ReachPackaging_PrintTicketAlreadyCommitted);
                     }
                     if (!value.GetType().Equals(typeof(PrintTicket)))
                     {
-                        throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_NotAPrintTicket));
+                        throw new XpsPackagingException(SR.ReachPackaging_NotAPrintTicket);
                     }
 
                     _printTicket = value.Clone();
@@ -410,7 +407,7 @@ namespace System.Windows.Xps.Packaging
         /// Returns an interface to the newly created fixed page.
         /// </returns>
         /// <exception cref="ObjectDisposedException">The FixedDocument has already been disposed</exception>
-        /// <exception cref="SRID.ReachPackaging_PanelOrSequenceAlreadyOpen">FixedPage is not completed.</exception>
+        /// <exception cref="SR.ReachPackaging_PanelOrSequenceAlreadyOpen">FixedPage is not completed.</exception>
         public
         IXpsFixedPageWriter
         AddFixedPage(
@@ -426,7 +423,7 @@ namespace System.Windows.Xps.Packaging
             //
             if (null != _currentPage)
             {
-                throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_PanelOrSequenceAlreadyOpen));
+                throw new XpsPackagingException(SR.ReachPackaging_PanelOrSequenceAlreadyOpen);
             }
 
             
@@ -483,7 +480,7 @@ namespace System.Windows.Xps.Packaging
             if (this.DocumentStructure != null)
             {
                 // Document structure already available for this FixedDocument
-                throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_MoreThanOneDocStructure));
+                throw new XpsPackagingException(SR.ReachPackaging_MoreThanOneDocStructure);
             }
 
             Uri pageUri = this.CurrentXpsManager.CreateStructureUri();
@@ -983,12 +980,12 @@ namespace System.Windows.Xps.Packaging
 
             if (pagePart == null)
             {
-                 throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_PartNotFound));
+                 throw new XpsPackagingException(SR.ReachPackaging_PartNotFound);
             }
             
             if (!pagePart.ValidatedContentType().AreTypeAndSubTypeEqual(XpsS0Markup.FixedPageContentType))
             {
-                throw new XpsPackagingException(SR.Get(SRID.ReachPackaging_NotAFixedPage));
+                throw new XpsPackagingException(SR.ReachPackaging_NotAFixedPage);
             }
 
             //
@@ -1051,7 +1048,7 @@ namespace System.Windows.Xps.Packaging
             {
                 if (documentStructureRelationship != null)
                 {
-                    throw new InvalidDataException(SR.Get(SRID.ReachPackaging_MoreThanOneDocStructure));
+                    throw new InvalidDataException(SR.ReachPackaging_MoreThanOneDocStructure);
                 }
 
                 documentStructureRelationship = rel;

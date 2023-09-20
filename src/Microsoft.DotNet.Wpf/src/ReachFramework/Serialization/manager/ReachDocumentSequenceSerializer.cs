@@ -151,10 +151,7 @@ namespace System.Windows.Xps.Serialization
             SerializablePropertyContext serializablePropertyContext
             )
         {
-            if(serializablePropertyContext == null)
-            {
-                throw new ArgumentNullException("serializablePropertyContext");
-            }
+            ArgumentNullException.ThrowIfNull(serializablePropertyContext);
 
             String attributeValue = String.Empty;
 
@@ -176,10 +173,7 @@ namespace System.Windows.Xps.Serialization
             SerializablePropertyContext serializablePropertyContext
             )
         {
-            if(serializablePropertyContext == null)
-            {
-                throw new ArgumentNullException("serializablePropertyContext");
-            }
+            ArgumentNullException.ThrowIfNull(serializablePropertyContext);
 
             String valueAsString                  = null;
             Object targetObjectContainingProperty = serializablePropertyContext.TargetObject;
@@ -194,7 +188,7 @@ namespace System.Windows.Xps.Serialization
                                                                        propertyValue);
 
 
-                if (typeof(Type).IsInstanceOfType(propertyValue))
+                if (propertyValue is Type)
                 {
                     int index = valueAsString.LastIndexOf('.');
                     valueAsString = string.Concat(

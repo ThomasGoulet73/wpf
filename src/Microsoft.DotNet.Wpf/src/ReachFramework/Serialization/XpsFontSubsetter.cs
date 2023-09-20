@@ -105,10 +105,7 @@ namespace System.Windows.Xps.Serialization
             BasePackagingPolicy packagingPolicy
             )
         {
-            if (null == packagingPolicy)
-            {
-                throw new ArgumentNullException("packagingPolicy");
-            }
+            ArgumentNullException.ThrowIfNull(packagingPolicy);
 
             _packagingPolicy = packagingPolicy;
             _fontEmbeddingManagerCache = new Dictionary<Uri, FEMCacheItem>(3, MS.Internal.UriComparer.Default);
@@ -135,10 +132,7 @@ namespace System.Windows.Xps.Serialization
             GlyphRun        glyphRun
             )
         {
-            if (null == glyphRun)
-            {
-                throw new ArgumentNullException("glyphRun");
-            }
+            ArgumentNullException.ThrowIfNull(glyphRun);
 
             FontEmbeddingRight embeddingRights = glyphRun.GlyphTypeface.EmbeddingRights;
 
@@ -356,7 +350,7 @@ namespace System.Windows.Xps.Serialization
            if( policy == FontSubsetterCommitPolicies.CommitEntireSequence &&
                 _commitCountPolicy != 1 )
             {
-                throw new ArgumentOutOfRangeException(SR.Get(SRID.ReachPackaging_SequenceCntMustBe1));
+                throw new ArgumentOutOfRangeException(SR.ReachPackaging_SequenceCntMustBe1);
             }
           _commitPolicy = policy;
         }
@@ -371,12 +365,12 @@ namespace System.Windows.Xps.Serialization
             if( _commitPolicy == FontSubsetterCommitPolicies.CommitEntireSequence &&
                 commitCount != 1 )
             {
-                throw new ArgumentOutOfRangeException(SR.Get(SRID.ReachPackaging_SequenceCntMustBe1));
+                throw new ArgumentOutOfRangeException(SR.ReachPackaging_SequenceCntMustBe1);
             }
             else
             if( commitCount < 1 )
             {
-                throw new ArgumentOutOfRangeException(SR.Get(SRID.ReachPackaging_CommitCountPolicyLessThan1));
+                throw new ArgumentOutOfRangeException(SR.ReachPackaging_CommitCountPolicyLessThan1);
             }
             _commitCountPolicy = commitCount;
         }
@@ -449,14 +443,8 @@ namespace System.Windows.Xps.Serialization
             BasePackagingPolicy             packagingPolicy
             )
         {
-            if (null == packagingPolicy)
-            {
-                throw new ArgumentNullException("packagingPolicy");
-            }
-            if (null == glyphTypeface)
-            {
-                throw new ArgumentNullException("glyphTypeface");
-            }
+            ArgumentNullException.ThrowIfNull(packagingPolicy);
+            ArgumentNullException.ThrowIfNull(glyphTypeface);
 
             _packagingPolicy = packagingPolicy;
             _streamWritten = false;
